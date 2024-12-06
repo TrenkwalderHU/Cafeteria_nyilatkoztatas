@@ -1,0 +1,68 @@
+café sql-ek:
+
+  SELECT distinct DimensionName
+  FROM [ODS_HU].[Source].[vwDimensionNX]
+  where DimensionType_NexonID='MUNKAK' 
+  and [DimensionCode] in (SELECT JobTitle FROM [ODS_HU].[ODS].[DimWorkContractDetailNX]
+  WHERE ProjectName like 'Hyginett%' 
+  AND DetailYear = 2024 AND DetailMonth = 11)
+  and (validto is null OR validto>GETDATE())
+
+  SELECT *
+  FROM [ODS_HU].[Source].[vwDimensionNX]
+  where DimensionType_NexonID='MUNKAK' 
+  and [DimensionCode] in (SELECT JobTitle FROM [ODS_HU].[ODS].[DimWorkContractDetailNX]
+  WHERE ProjectName like 'Hyginett%'
+  AND DetailYear = 2024 AND DetailMonth = 12)
+  order by DimensionCode asc
+
+  SELECT distinct DimensionName as GroupName                   
+  FROM [ODS_HU].[Source].[vwDimensionNX]                   
+  where DimensionType_NexonID='MUNKAK'                    
+  and [DimensionCode] in (SELECT JobTitle FROM [ODS_HU].[ODS].[DimWorkContractDetailNX]                   
+  WHERE ProjectName = 'Hyginett Gyöngyös'                    AND DetailYear = YEAR(GETDATE()) AND DetailMonth = MONTH(GETDATE()))
+
+
+
+
+
+
+
+ SELECT *
+  FROM [ODS_HU].[ODS].[DimEmployee]
+  where id in (SELECT EmployeeID FROM [ODS_HU].[ODS].[DimWorkContractBaseNX]
+WHERE id in (SELECT WorkContractBaseID FROM [ODS_HU].[ODS].[DimWorkContractDetailNX]
+  WHERE ProjectName like 'Hyginett%' 
+  AND DetailYear = 2024 AND DetailMonth = 11)
+  and (validto is null OR validto>GETDATE()))
+  order by LastName asc
+
+
+  Select * from [ODS_HU].[ODS].[DimWorkContractBaseNX]
+  where EmployeeID='12946347'
+
+  SELECT * FROM [ODS_HU].[ODS].[DimWorkContractDetailNX]
+  where WorkContractBaseID='21552412'
+
+
+
+
+
+
+
+
+SELECT * FROM [ODS_HU].[ODS].[DimWorkContractDetailNX]
+  WHERE WorkContractBaseID = 21560691 
+  --AND DetailYear = [ev] AND DetailMonth = [honap]
+
+  SELECT * FROM [ODS_HU].[ODS].[DimWorkContractBaseNX] 
+WHERE EmployeeID = 12949991
+ORDER BY Validfrom DESC
+
+SELECT top 1000 *
+  FROM [ODS_HU].[ODS].[DimEmployee]
+  where TAJID like '043903472'
+
+  SELECT *
+  FROM [ODS_HU].[Source].[vwEmployeeNX]
+  where TAJID=043903472

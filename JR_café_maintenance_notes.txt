@@ -1,0 +1,5 @@
+-Egy új juttatás esetén fel kell azt venni 
+1, manage datába, 
+2, az első lépés formjára
+3, a ShowAvailableCafeTypes scriptbe
+4, az OnSettingsSubmit scriptbe

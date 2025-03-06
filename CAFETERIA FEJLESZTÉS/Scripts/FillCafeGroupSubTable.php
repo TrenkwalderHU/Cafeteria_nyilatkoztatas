@@ -7,8 +7,17 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
         $returnArray=array();
 		$department=$this->getParameter('department');
 		$entity=$this->getParameter('entity');
-		$departmentName = substr($department, 0, (strpos($department, "(")-1));
-		$projectCode = substr($department, strpos($department, "(")+1, strpos($department, ")")-strpos($department, "(")-1);
+		$departmentArray = explode("(", $department);
+		$departmentName="";
+		for ($i=0;$i<count($departmentArray)-1;$i++){
+			if ($i==0){
+				$departmentName=$departmentArray[$i];
+			}
+			else{
+				$departmentName.="(".$departmentArray[$i];
+			}
+		}
+		$projectCode = substr($departmentArray[count($departmentArray)-1], 0, strlen($departmentArray[count($departmentArray)-1])-1);
 		$externalDB = $this->getDBConnection('ODS_HU');
         $sql = "SELECT distinct DimensionName as CafeGroupName
                   FROM [ODS_HU].[Source].[vwDimensionNX]
@@ -16,8 +25,8 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
                   and [DimensionCode] in (SELECT JobTitle FROM [ODS_HU].[ODS].[DimWorkContractDetailNX]
                   WHERE ProjectName = '".$departmentName."' and ProjectCodeNX='".$projectCode."'
                   AND DetailYear = YEAR(GETDATE()) AND DetailMonth = MONTH(GETDATE()))
-                  and (validto is null OR validto>GETDATE())
-                  and Mandant = '".$entity."'";
+                  and (validto is null OR validto>=CONVERT(date, getdate()))
+                  and MandantMossID = ".$entity;
         $result = $externalDB->query($sql);
         if ($result === false) {
             throw new JobRouterException($externalDB->getErrorMessage());

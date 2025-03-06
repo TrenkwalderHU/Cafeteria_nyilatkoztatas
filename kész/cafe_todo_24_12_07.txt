@@ -1,0 +1,9 @@
+todo:
+
+ha a csoport nem 0, akkor táblázat megjelenítése, amount elrejtése, ha 0, akkor amount látszik, táblát rejt
+
+ha az unjustifiedabsence be van jelölve, akkor megjelenik a days és kötelező, amúgy el van rejtve és nem kötelező
+
+nexont hozzáforrasztani, munkakörök előálljanak a táblába
+
+legalább 1 juttatást kötelező legyen kiválasztani!!!

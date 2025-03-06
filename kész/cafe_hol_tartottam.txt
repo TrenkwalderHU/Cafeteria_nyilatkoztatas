@@ -1,0 +1,6 @@
+be kéne tölteni subtable-be elöször az sql lekérdezés eredményeit, és a linkekre indítani egy WF-t
+
+2 módon lehet: 1, a subtable-be betöltöm az adataikat is
+		2, a linkhez hozzáteszem paraméterként az adatokat
+
+később majd a beállításokat is hozzá kell tenni.

@@ -1,0 +1,18 @@
+Café kérdések Ágihoz:
+
+- Nationality, 3. országbeliek HU? SVK-val mi a helyzet? PL PG-nél Görciová Andrea, neki HU-s a portálos bejelentkezése?
+	-már nem releváns
+
+- limitek nincsenek benne még jelenleg a caféban, bele kell valahova tenni
+	-kódban legyenek inkább, szólnak, ha változik a jogszabály
+- ha csak 1 emberre akarják indítani azt hogyan? mondjuk év közbeni belépő.. (ötlet: "minden dolgozóra" pipa, ha be van pipálva, akkor minden dolgozóra készül, ha nincs, akkor keresőmező, amivel egy táblába hozzáadhat dolgozókat, majd ellenőrizheti őket)
+	-névre keresés, vagy adóazonosítóra keresés, belépés dátuma tól-ig kereshető legyen
+	-összes találat számát kijelezni
+	-lapozást implementálni
+	
+- Ne hívjam le Viktorhoz hasonlóan a szervezeti egységhez tartozó Payrollert?
+	-behúzhatom, Hr referens=Project Manager, mind2-t adatbázisból
+
+- külső táblába az opciók (jobdata), onnan betölteni
+
+- szemüveget a választhatók közé + állatkert,+aktív magyar, stb

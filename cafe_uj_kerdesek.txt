@@ -1,0 +1,64 @@
+2025.03.05
+-Szabályok:
+keretelosztás havi egyenlő/tlen esetén:
+	-akár azt is lehet, hogy egyenlőnél csak 1 hónapot adunk nekik, és a háttérben másolódik
+
+időszakválasztó havi/éves:
+	-havinál felszorzom 12-vel
+
+kerettípus nettó/bruttó/szuperbruttó:
+
+
+igazolatlan távollét esetén nem jár
+
+
+próbaidő után visszamenőleg, mondjuk ha jan 1-től van, akkor áprilistól felveheti az egész addigi kummuláltat, addig semmit?
+
+
+kell az, amikor arányosan jár minden hónapban (Legoféle)? 
+pl. ha 30 napból pl ha 16-án kezd, akkor a havi összeg felét kapja meg arra a hónapra? Itt betegség esetén arányosan kevesebb az adott hónapra? és igazolatlannál?
+
+
+
+
+2025.03.04
+-Limit/idószaknál legyen a 0 helyett hatalmas szám, mondjuk 99999999, hogy értsék, hogy nincs limit? Vagy legyen ez is benne a jelmagyarázatban?
+	- Ági szerint jó ez így
+
+-Cicoma kell? pl.: text-align: center a hónapokra, word-wrap a további időszak(hónapra)
+	- Kell, időszak/hónap legyen 2 sorban szépen, a hónapértékek legyenek középre rendezve
+
+-Cicoma 2 kell? Excelhez hasonló, vagy egyéb színezések, hogy az oszlopokat jobban el lehessen különíteni?
+	-darkgrey a bruttókra, más nem
+
+-Cicoma 3 kell? Hogy ne legyenek ilyen nagyok az oszlopok esetleg a limit/időszakra? szorzóra, szeptemberre, stb?
+	- Baj, igyekezzünk lerövidíteni őket.
+
+-Csoport kijelzés kell? Elrejtsem, ha valakiknél egységes, vagy munkakörönkénti, és a belsősnél jelenítsem meg?
+	- Rejtsük el
+
+-Kell, hogy átugorjon a szép kártya felettire? (megoldható kell, hogy legyen, ez ne legyen a döntés alapja)
+	- Nem kell (juhéé)
+
+
+
+
+2025.02.27
+-A válaszható cafék, a munkavállaló táblázatánál megjelenő neve ugyanaz legyen, vagy, ha nem, akkor kérek egy listát hozzá.
+	-jelmagyarázatot a nagy üres fehér helyre jobbra, egyébként a névbe nem kell a magyarázat, lehet keskenyebb az oszlop
+
+
+-juttatás lista százalékok és limitek segítség
+	-kész, többit teszteléskor/után
+
+
+
+
+2025.02.21
+-Mi nem kérhetünk 1 hónapra nagyobb összeget, mint az addigi felhalmozott (ha pl. 120 ezer van 1 évre, akkor Januárra nem kérhetünk 12000-nél többet). 
+Létezik olyan munkahely, ahol nincs meghatározva maximum érték januárra mondjuk?
+	-Nem ismerünk ilyet, ne engedjük előre
+
+
+-A törteket hogyan kezeljük? Jelenleg lefelé kerekítek a havi összegeknél, a végén ki fog jönni pár forint eltérés, decemberben visszaadom mindet, így jó?
+	-ez így jó

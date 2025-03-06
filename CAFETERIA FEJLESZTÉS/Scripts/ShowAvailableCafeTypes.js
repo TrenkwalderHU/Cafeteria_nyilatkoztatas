@@ -1,0 +1,23 @@
+function ShowAvailableCafeTypes()
+{
+    jr_show('SZEPUnderLimit');
+    jr_show('SZEPAboveLimit');
+    jr_show('SZEPActive');
+    jr_show('CultureTicket');
+    jr_show('SportTicket');
+    jr_show('KindergartenAllowance');
+    jr_show('VirusTestAndVaccine');
+    jr_show('BicycleUsage');
+    jr_show('CarSharing');
+    jr_show('HomeOfficeAllowance');
+    jr_show('WineProducts');
+    jr_show('GroupRiskInsurances');
+    jr_show('CheckoutPayments');
+    jr_show('VolunteerMemberFee');
+    jr_show('MoneyAllowance');
+    jr_show('CommuteRefund');
+    jr_show('GlassesRefund');
+    jr_show('StudentLoanSupport');
+    jr_show('ZooTicket');
+    jr_show('HousingSupport');
+}

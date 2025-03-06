@@ -1,0 +1,7 @@
+https://jobrouter.trenkwalder.io/jobrouter/?cmd=PublicStart&ps=e1b927e1599a72e58297572b68d5b4fe
+
+https://jobrouter.trenkwalder.com/jobrouter/?cmd=PublicStart&ps=e9599b1b526f3b8058ddf7bc2fac4796&username=publicuserHU&code=C7&taxid=HU8413874459
+
+var url = document.location.href;
+    jr_set_value('tst_box', url);
+    jr_execute_dialog_function('link', {}, GetCode);

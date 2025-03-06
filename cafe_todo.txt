@@ -1,9 +1,37 @@
-todo:
+Most:
+- havi egyenőtlen/havi egyenlő juttatás
+- igazolatlan távollét esetén nem jár ????? le tudom kérni?
+- további szabályok implementálása
+- manuális mentés gomb hozzáadása
+- tört évnél nem tehetem be decemberre az egész éveset
+- letesztelni ha a megjelenítésben 0 tizedes jegy van, lehet-e a háttérben mégis több?
 
-ha a csoport nem 0, akkor táblázat megjelenítése, amount elrejtése, ha 0, akkor amount látszik, táblát rejt
+végén:
+- behúzni, Hr referens=Project Manager,Payrollert mind2-t adatbázisból
+- Dolgozó lista táblában alul névre keresés, vagy adóazonosítóra keresés, belépés dátuma tól-ig kereshető legyen
+	-összes találat számát kijelezni
+	-lapozást implementálni
+- opciók manage datába, ne kelljen újra és újra kitölteni
+	 helyette inkább opció indításnál, hogy beállítások betöltése
+- átpakolni mywfms-re, a security check nem lesz elég
+- leellenőrizni, hogy az availableamountnál ha manuálisan átírom, akkor el tudom-e küldeni, a rendszert átverve, és ha igen, akkor gátat tenni ehhez a kódba
+	-save cell value ugyanez (hiddensaveCellValue element segítségével)
+	-Személyes adatok ugyanez, elrejtett 2. oldal ugyanez, más nevével lehetne nyilatkozni, stb
 
-ha az unjustifiedabsence be van jelölve, akkor megjelenik a days és kötelező, amúgy el van rejtve és nem kötelező
 
-nexont hozzáforrasztani, munkakörök előálljanak a táblába
 
-legalább 1 juttatást kötelező legyen kiválasztani!!!
+kész:
+- Nettó/bruttó oszlopok
+- Új juttatások felvétele a listába
+- Café neveket javítani, nem kell jelmagyarázat, név oszlop legyen kisebb
+- Nettó/bruttó oszlopokkal számoljon a szorzó segítségével
+- maradékokat írja ki már a legelején
+- bruttót figyeljék a limitek
+- aktív magyarok limitet tesztelni
+- Limiteket megjeleníteni
+- Ha több limit van, felfedni őket
+- legalább 1 juttatást kötelező legyen kiválasztani!!!
+- munkakörönkénti juttatásra ránézni, fixálni
+- text-align: center a hónapokra, word-wrap a további időszak(hónapra)
+- Excelhez hasonló, vagy egyéb színezések darkgrey a bruttókra
+- méretek a limit/időszakra? szorzóra, szeptemberre, stb

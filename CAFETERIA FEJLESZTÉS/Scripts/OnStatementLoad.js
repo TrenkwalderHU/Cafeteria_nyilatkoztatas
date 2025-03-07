@@ -18,18 +18,54 @@ function onDataFromLinkSuccess(returnData){
                 jr_set_value('AvailableAmount', element["Amount"]);
                 jr_set_value('CafeGroup', element["GroupName"]);
             }
-            
         }
     }
     jr_set_value('FirstName', returnData.result.success["firstName"]);
     jr_set_value('LastName', returnData.result.success["lastName"]);
     jr_set_value('JobDescription', returnData.result.success["jobTitle"]);
+    jr_set_value('ProbationPeriodEnd', returnData.result.success["ProbationPeriodEnd"]);
+    var firstWorkDay=new Date(Date.parse(returnData.result.success["FirstWorkDay"]));
+    jr_set_value('FirstWorkDay', firstWorkDay);
+    var deadline=new Date(Date.parse(returnData.result.success["CafeteriaDeadline"]));
+    jr_set_value('CafeteriaDeadline', deadline);
+    var startDate = new Date(Date.parse(returnData.result.success["validFrom"]));
     jr_set_value('StartOfContract', returnData.result.success["validFrom"]);
+    var validMonthRule=parseInt(returnData.result.success["ValidMonthRule"]);
+    jr_set_value('ValidMonthRule', validMonthRule);
+    var validMonths=0;
+    var startYear= startDate.getFullYear();
+    var currentYear= firstWorkDay.getFullYear();
+    if (startYear<currentYear) {
+        validMonths=12;
+    }
+    else
+    {
+        var startMonth=startDate.getMonth();
+        var startContractDay=startDate.getDate();
+        if (startContractDay<validMonthRule) { //2 or 16
+            //handle 30/days time based rules/systems
+            //We will cross the bridge when we get to it
+            validMonths=12-startMonth;
+        }
+        else
+        {
+            var firstDayOfYear=firstWorkDay.getDate();
+            if (startMonth==0 && startContractDay<=firstDayOfYear) {
+                validMonths=12;
+            }
+            else
+            {
+                validMonths=11-startMonth;
+            }
+        }
+    }
+    jr_set_value('ValidMonthsCount', validMonths);
     jr_set_value('TaxNumber', returnData.result.success["taxID"]);
     jr_set_value('BirthName', returnData.result.success["birthName"]);
     jr_set_value('TaxingType', returnData.result.success["TaxingTypeSelector"]);
     jr_set_value('Term', returnData.result.success["TermSelector"]);
-    jr_set_value('FullMonthRule', returnData.result.success["FullMonthRule"]);
+    jr_set_value('EqualMonthRule', returnData.result.success["EqualMonthRule"]);
+    jr_set_value('ProbationMonthRule', returnData.result.success["ProbationMonthRule"]);
 
 
     var optionArray=[];
@@ -73,11 +109,13 @@ function onDataFromLinkSuccess(returnData){
             var cellElement=document.getElementById("HU_CAFE_AMOUNTS_TABLE_VIEW_"+columnName+"_"+(addedRows-1));
             cellElement.setAttribute("readonly",true);
         }
-        InitTable();
+        InitTable(returnData.result.success["validFrom"]);
     }
 }
 
 function InitTable(){
+    //I need to count the months that they are viable for eg 10
+    //set it into an element into the process table
     var viewName='HU_CAFE_AMOUNTS_TABLE_VIEW';
     var availableAmount=parseInt(jr_get_value('AvailableAmount'));
     var showLimit2=false;
@@ -122,20 +160,24 @@ function InitTable(){
             showLimit4=true;
         }
         
+        document.getElementById("div_HU_CAFE_AMOUNTS_TABLE_VIEW_LimitPeriod1_header").style.width="50px";
         if (showLimit2) {
             jr_show_subtable_column(viewName, 'LimitPeriod2');
             jr_show_subtable_column(viewName, 'LimitAmount2');
             document.getElementById("div_HU_CAFE_AMOUNTS_TABLE_VIEW_LimitPeriod2_header").style.whiteSpace="normal";
+            document.getElementById("div_HU_CAFE_AMOUNTS_TABLE_VIEW_LimitPeriod2_header").style.width="50px";
         }
         if (showLimit3) {
             jr_show_subtable_column(viewName, 'LimitPeriod3');
             jr_show_subtable_column(viewName, 'LimitAmount3');
             document.getElementById("div_HU_CAFE_AMOUNTS_TABLE_VIEW_LimitPeriod3_header").style.whiteSpace="normal";
+            document.getElementById("div_HU_CAFE_AMOUNTS_TABLE_VIEW_LimitPeriod3_header").style.width="50px";
         }
         if (showLimit4) {
             jr_show_subtable_column(viewName, 'LimitPeriod4');
             jr_show_subtable_column(viewName, 'LimitAmount4');
             document.getElementById("div_HU_CAFE_AMOUNTS_TABLE_VIEW_LimitPeriod4_header").style.whiteSpace="normal";
+            document.getElementById("div_HU_CAFE_AMOUNTS_TABLE_VIEW_LimitPeriod4_header").style.width="50px";
         }
     
         //Calculate all the sums and remaining values to display them in the table
@@ -176,5 +218,20 @@ function InitTable(){
                 document.getElementById("HU_CAFE_AMOUNTS_TABLE_VIEW_LimitPeriod4_"+rowID).style.textAlign="center";
             }
         }
+    }
+
+    var selectAmountRule=jr_get_value('EqualMonthRule');
+    if (selectAmountRule=="havi egyenlő juttatás összeg választható") {
+        for (let monthI = 0; monthI < allMonthsArrayForSum.length-1; monthI++) {
+            let currentMonthArray = allMonthsArrayForSum[monthI];
+            jr_hide_subtable_column(viewName, currentMonthArray[0]);
+            jr_hide_subtable_column(viewName, currentMonthArray[3]);
+        }
+        
+        jr_set_column_label('HU_CAFE_AMOUNTS_TABLE_VIEW', "December", 'Hónap nettó');
+        jr_set_column_label('HU_CAFE_AMOUNTS_TABLE_VIEW', "DecemberGross", 'Hónap bruttó');
+        jr_set_subtable_value(viewName, rowIDs.length-1, "December",availablePerMonth);
+        jr_set_subtable_value(viewName, rowIDs.length-1, "DecemberGross",availablePerMonth);
+        jr_set_subtable_value(viewName, rowIDs.length-1, "Sum", availableAmount);
     }
 }

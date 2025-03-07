@@ -19,7 +19,7 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
 		}
 		$projectCode = substr($departmentArray[count($departmentArray)-1], 0, strlen($departmentArray[count($departmentArray)-1])-1);
 		$externalDB = $this->getDBConnection('ODS_HU');
-        $sql = "SELECT e.FirstName, e.LastName, e.BirthName, e.TaxID, e.Email, base.ValidFrom, base.ValidTo, dim.DimensionName 
+        $sql = "SELECT e.FirstName, e.LastName, e.BirthName, e.TaxID, e.Email, base.ValidFrom, base.ValidTo, dim.DimensionName, base.ProbationPeriodEnd
 				FROM [ODS_HU].[ODS].[DimEmployee] e 
 				inner join [ODS_HU].[ODS].[DimWorkContractBaseNX] base on e.ID=base.EmployeeID
 				inner join [ODS_HU].[ODS].[DimWorkContractDetailNX] detail on base.ID=detail.WorkContractBaseID

@@ -49,6 +49,7 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
             $returnArray["validTo"]=$row["validTo"];
             $returnArray["birthName"]=$row["birthName"];
             $returnArray["email"]=$row["email"];
+            $returnArray["ProbationPeriodEnd"]=$row["ProbationPeriodEnd"];
             $stepID=$row["step_id"];
         }
 
@@ -98,12 +99,7 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
             $returnArray["TermSelector"]=$row['TermSelector'] ;
             $returnArray["TargetSelector"]=$row['TargetSelector'] ;
             $returnArray["TaxingTypeSelector"]=$row['TaxingTypeSelector'] ;
-            $returnArray["FullMonthRule"]=$row['FullMonthRule'] ;
             $returnArray["NoValidMonthRules"]=$row['NoValidMonthRules'] ;
-            $returnArray["FullMonthValidMonth"]=$row['FullMonthValidMonth'] ;
-            $returnArray["Only15daysValidMonth"]=$row['Only15daysValidMonth'] ;
-            $returnArray["AfterProbationMonth"]=$row['AfterProbationMonth'] ;
-            $returnArray["OnlyAfterProbation"]=$row['OnlyAfterProbation'] ;
             $returnArray["UnjustifiedAbsence"]=$row['UnjustifiedAbsence'] ;
             $returnArray["NumberOfUnjustifiedA"]=$row['NumberOfUnjustifiedA'] ;
             $returnArray["CafeteriaDeadline"]=$row['CafeteriaDeadline'] ;
@@ -116,6 +112,10 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
             $returnArray["MandantMossID"]=$row['MandantMossID'] ;
             $returnArray["StartOfContract"]=$row['StartOfContract'] ;
             $returnArray["AvailableAmount"]=$row['AvailableAmount'];
+            $returnArray["FirstWorkDay"]=$row['FirstWorkDay'];
+            $returnArray["EqualMonthRule"]=$row['EqualMonthRule'];
+            $returnArray["ProbationMonthRule"]=$row['ProbationMonthRule'];
+            $returnArray["ValidMonthRule"]=$row['ValidMonthRule'];
         }
         //if we need to get the cafe title groups and amounts
         if ($returnArray["CafeGroupSelector"]>0) {

@@ -1,23 +1,22 @@
-2025.03.05
--Szabályok:
-keretelosztás havi egyenlő/tlen esetén:
-	-akár azt is lehet, hogy egyenlőnél csak 1 hónapot adunk nekik, és a háttérben másolódik
+2025.03.05-06
+- Ha más cégnél vett föl szépet, vagy kúltúrát, stb, azt honnan tudjuk meg, ez fontos?
+	- nem kell vele foglalkoznom
 
-időszakválasztó havi/éves:
-	-havinál felszorzom 12-vel
-
-kerettípus nettó/bruttó/szuperbruttó:
+- kerettípus nettó/bruttó/szuperbruttó:
+	- szuperbruttó 13% szochóval növelt, szóval duplán többet vonunk le
 
 
-igazolatlan távollét esetén nem jár
+- próbaidő után visszamenőleg, mondjuk ha jan 1-től van, akkor áprilistól felveheti az egész addigi kummuláltat, addig semmit?
+	- Igen, addig nem is nyilatkoztatják
 
 
-próbaidő után visszamenőleg, mondjuk ha jan 1-től van, akkor áprilistól felveheti az egész addigi kummuláltat, addig semmit?
+- kell az, amikor arányosan jár minden hónapban (Legoféle)? 
+pl. ha 30 napból pl ha 16-án kezd, akkor a havi összeg felét kapja meg arra a hónapra?
+	- a hídon majd átkelünk
 
 
-kell az, amikor arányosan jár minden hónapban (Legoféle)? 
-pl. ha 30 napból pl ha 16-án kezd, akkor a havi összeg felét kapja meg arra a hónapra? Itt betegség esetén arányosan kevesebb az adott hónapra? és igazolatlannál?
-
+- igazolatlan távollét esetén nem jár
+	- Ezzel nem kell foglalkoznom
 
 
 
@@ -39,6 +38,12 @@ pl. ha 30 napból pl ha 16-án kezd, akkor a havi összeg felét kapja meg arra 
 
 -Kell, hogy átugorjon a szép kártya felettire? (megoldható kell, hogy legyen, ez ne legyen a döntés alapja)
 	- Nem kell (juhéé)
+
+-keretelosztás havi egyenlő/tlen esetén:
+	-akár azt is lehet, hogy egyenlőnél csak 1 hónapot adunk nekik, és a háttérben másolódik
+
+-időszakválasztó havi/éves:
+	-havinál felszorzom 12-vel
 
 
 

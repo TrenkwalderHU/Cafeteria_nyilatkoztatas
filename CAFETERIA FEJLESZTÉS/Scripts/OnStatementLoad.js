@@ -24,11 +24,15 @@ function onDataFromLinkSuccess(returnData){
     jr_set_value('LastName', returnData.result.success["lastName"]);
     jr_set_value('JobDescription', returnData.result.success["jobTitle"]);
     jr_set_value('ProbationPeriodEnd', returnData.result.success["ProbationPeriodEnd"]);
-    var firstWorkDay=new Date(Date.parse(returnData.result.success["FirstWorkDay"]));
-    jr_set_value('FirstWorkDay', firstWorkDay);
+    console.log(returnData.result.success["FirstWDayOfTheYear"]);
+    var firstWorkDay=new Date(Date.parse(returnData.result.success["FirstWDayOfTheYear"]));
+    console.log(Date.parse(returnData.result.success["FirstWDayOfTheYear"]));
+    console.log(firstWorkDay);
+    jr_set_value('FirstWDayOfTheYear', firstWorkDay);
     var deadline=new Date(Date.parse(returnData.result.success["CafeteriaDeadline"]));
     jr_set_value('CafeteriaDeadline', deadline);
     var startDate = new Date(Date.parse(returnData.result.success["validFrom"]));
+    console.log("itt még jó?22");
     jr_set_value('StartOfContract', returnData.result.success["validFrom"]);
     var validMonthRule=parseInt(returnData.result.success["ValidMonthRule"]);
     jr_set_value('ValidMonthRule', validMonthRule);

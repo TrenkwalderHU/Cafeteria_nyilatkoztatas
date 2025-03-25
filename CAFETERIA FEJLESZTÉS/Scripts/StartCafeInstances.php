@@ -4,7 +4,19 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\RuleExecutionFuncti
 {
 	public function execute($rowId = null)
 	{
-		$department=$this->getTableValue('Department');
+	    $subtable="HU_CAFE_EMPLOYEEDATA";
+	    $rowIDs=$this->getSubtableRowIds($subtable);
+	    for($i = count($rowIDs) - 1; $i >= 0; $i--)
+        {
+            $isNeeded=$this->getSubtableValue($subtable, $rowIDs[$i], "isNeeded", True);
+            if ($isNeeded==0)
+            {
+                $this->deleteSubtableRow($subtable, $rowIDs[$i]);
+            }
+        }
+	    
+	    
+		/*$department=$this->getTableValue('Department');
 		$entity=$this->getTableValue('TrenkwalderEntitySel');
 		$mandantMossID=$this->getTableValue('MandantMossID');
 		$departmentArray = explode("(", $department);
@@ -27,7 +39,7 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\RuleExecutionFuncti
   						AND DetailYear = YEAR(GETDATE()) AND DetailMonth = MONTH(GETDATE()))
                   and (validto is null OR validto>=CONVERT(date, getdate())))
 				and MandantMossID=".$mandantMossID."
-  				order by LastName asc";
+  				order by LastName asc;
         $result = $externalDB->query($sql);
         if ($result === false) {
             throw new JobRouterException($externalDB->getErrorMessage());
@@ -114,7 +126,7 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\RuleExecutionFuncti
     
     		$result = $this->dbWrite->preparedExecute($sql, $parameterValues, $parameterTypes, new LogInfo(__METHOD__));
     		$this->dbWrite->free($result);
-        }
+        }*/
 	}
 }
 ?>

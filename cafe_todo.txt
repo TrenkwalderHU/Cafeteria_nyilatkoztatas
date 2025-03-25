@@ -1,5 +1,5 @@
 Most:
-- havi egyenőtlen/havi egyenlő juttatás
+- tört éves problémák javítása/ellenőrzése
 - lehet kell egy összesen bruttó
 - akár azt is lehet, hogy egyenlőnél csak 1 hónapot adunk nekik, és a háttérben másolódik
 - időszakválasztó havi/éves: havinál felszorzom 12-vel (mindkét mező onchange eventjében kiértékelem mi van a másikban és úgy mentem le egy 3. elrejtett mezőbe)
@@ -28,6 +28,8 @@ PHP-val egy utána lévő szakaszban (mondjuk lépésben) úrja átszámolni az 
 
 
 kész:
+- manuális tesztelehetőség felállítása (próbaidő, törthónap tesztelése valós embernek protálra kiküldött példánya nélkül)
+- havi egyenőtlen/havi egyenlő juttatás
 - Nettó/bruttó oszlopok
 - Új juttatások felvétele a listába
 - Café neveket javítani, nem kell jelmagyarázat, név oszlop legyen kisebb

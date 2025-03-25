@@ -43,7 +43,7 @@ function sameAmounts(currentRowID,columnName){
             value=0;
         }
         let multiplier=Number(jr_get_subtable_value(viewName, rowID, "Multiplier"));
-        let grossModifiedValue=value*multiplier;
+        let grossModifiedValue=Math.floor(value*multiplier);
         sum+=grossModifiedValue;
         if (sum>availablePerMonth) {
             jr_set_subtable_value(viewName, currentRowID, columnName, originalValue);
@@ -146,7 +146,7 @@ function sameAmounts(currentRowID,columnName){
             value=0;
         }
         let multiplier=Number(jr_get_subtable_value(viewName, currentRowID, "Multiplier"));
-        jr_set_subtable_value(viewName, currentRowID, "DecemberGross", value*multiplier);
+        jr_set_subtable_value(viewName, currentRowID, "DecemberGross", Math.floor(value*multiplier));
     }
 }
 
@@ -224,7 +224,7 @@ function checkLimits(currentRowID, columnName)
                 value=0;
             }
             let multiplier=Number(jr_get_subtable_value(viewName, rowID, "Multiplier"));
-            let grossModifiedValue=value*multiplier;
+            let grossModifiedValue=Math.floor(value*multiplier);
 
             if (monthI<monthsLimit) {
                 sum+=value;
@@ -342,7 +342,7 @@ function displaySums(currentRowID, columnName){
                 value=0;
             }
             let multiplier=Number(jr_get_subtable_value(viewName, rowID, "Multiplier"));
-            let grossModifiedValue=value*multiplier;
+            let grossModifiedValue=Math.floor(value*multiplier);
             //console.log("bruttósított érték:");
             //console.log(grossModifiedValue);
             sum+=value;
@@ -377,6 +377,6 @@ function displaySums(currentRowID, columnName){
     }
     let multiplier=Number(jr_get_subtable_value(viewName, currentRowID, "Multiplier"));
     if (modifiedMonthArray.length>0) {
-        jr_set_subtable_value(viewName, currentRowID, modifiedMonthArray[3], value*multiplier);
+        jr_set_subtable_value(viewName, currentRowID, modifiedMonthArray[3], Math.floor(value*multiplier));
     }
 }

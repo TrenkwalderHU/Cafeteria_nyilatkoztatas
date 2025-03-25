@@ -1,5 +1,5 @@
 Most:
-- tört éves problémák javítása/ellenőrzése
+- próbaidős szabályok implementálása
 - lehet kell egy összesen bruttó
 - akár azt is lehet, hogy egyenlőnél csak 1 hónapot adunk nekik, és a háttérben másolódik
 - időszakválasztó havi/éves: havinál felszorzom 12-vel (mindkét mező onchange eventjében kiértékelem mi van a másikban és úgy mentem le egy 3. elrejtett mezőbe)
@@ -22,12 +22,14 @@ végén:
 - leellenőrizni, hogy az availableamountnál ha manuálisan átírom, akkor el tudom-e küldeni, a rendszert átverve, és ha igen, akkor gátat tenni ehhez a kódba
 	-save cell value ugyanez (hiddensaveCellValue element segítségével)
 	-Személyes adatok ugyanez, elrejtett 2. oldal ugyanez, más nevével lehetne nyilatkozni, stb
+	-available amount a valid hónapoktól függően változik elrejtve, a js-ben, ezt is utánaellenőrizni
 PHP-val egy utána lévő szakaszban (mondjuk lépésben) úrja átszámolni az egész café nyilatkozatot, hogy tényleg valid-e.
 - Nexon Import elkészítése
 - Portál dokumentum törlése
 
 
 kész:
+- tört éves problémák javítása/ellenőrzése
 - manuális tesztelehetőség felállítása (próbaidő, törthónap tesztelése valós embernek protálra kiküldött példánya nélkül)
 - havi egyenőtlen/havi egyenlő juttatás
 - Nettó/bruttó oszlopok

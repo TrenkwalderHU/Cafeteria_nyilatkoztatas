@@ -22,13 +22,13 @@ function differentAmounts(currentRowID,columnName){
 function sameAmounts(currentRowID,columnName){
     var viewName='HU_CAFE_AMOUNTS_TABLE_VIEW';
     var originalValue=parseInt(jr_get_value('SaveCellValueHelper'));
-    var availableAmount=parseInt(jr_get_value('AvailableAmount'));
+    var availableAmount=parseInt(jr_get_value('RealAvailableAmount'));
     var validMonthsCount=parseInt(jr_get_value('ValidMonthsCount'));
     if (isNaN(originalValue)){
         originalValue=0;
     }
     var valueOverError=false;
-    var availablePerMonth=Math.floor(availableAmount/12);
+    var availablePerMonth=Math.floor(availableAmount/validMonthsCount);
     var rowIDs=jr_get_subtable_row_ids(viewName);
     var sum=0;
     for (let rowsI = 0; rowsI < rowIDs.length-1; rowsI++) {
@@ -154,12 +154,13 @@ function checkLimits(currentRowID, columnName)
 {
     var viewName='HU_CAFE_AMOUNTS_TABLE_VIEW';
     var originalValue=parseInt(jr_get_value('SaveCellValueHelper'));
-    var availableAmount=parseInt(jr_get_value('AvailableAmount'));
+    var availableAmount=parseInt(jr_get_value('RealAvailableAmount'));
+    var validMonthsCount=parseInt(jr_get_value('ValidMonthsCount'));
     if (isNaN(originalValue)){
         originalValue=0;
     }
     var valueOverError=false;
-    var availablePerMonth=Math.floor(availableAmount/12);
+    var availablePerMonth=Math.floor(availableAmount/validMonthsCount);
     var rowIDs=jr_get_subtable_row_ids(viewName);
     var allMonthsArray=[];
     allMonthsArray.push(['January',availablePerMonth,0]);
@@ -308,8 +309,9 @@ function checkLimits(currentRowID, columnName)
 function displaySums(currentRowID, columnName){
     var viewName='HU_CAFE_AMOUNTS_TABLE_VIEW';
     var rowIDs=jr_get_subtable_row_ids(viewName);
-    var availableAmount=parseInt(jr_get_value('AvailableAmount'));
-    var availablePerMonth=Math.floor(availableAmount/12);
+    var availableAmount=parseInt(jr_get_value('RealAvailableAmount'));
+    var validMonthsCount=parseInt(jr_get_value('ValidMonthsCount'));
+    var availablePerMonth=Math.floor(availableAmount/validMonthsCount);
     //Calculate all the sums and remaining values to display them in the table
     var allMonthsArrayForSum=[];
     allMonthsArrayForSum.push(['January',availablePerMonth,0,'JanuaryGross']);

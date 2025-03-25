@@ -5,34 +5,33 @@ function OnStatementLoad(){
 }
 
 function onDataFromLinkSuccess(returnData){
+    var realAvailableAmount=0;
     //All the same or different by jobtitle groups
     if (returnData.result.success["CafeGroupSelector"]==0) {
         jr_set_value('CafeGroup', 'Minden munkavállaló egységes');
-        jr_set_value('AvailableAmount', returnData.result.success["AvailableAmount"]);
+        realAvailableAmount=returnData.result.success["AvailableAmount"];
+        
     }
     else
     {
         for (let groupsI = 0; groupsI < returnData.result.success["Groups"].length; groupsI++) {
             const element = returnData.result.success["Groups"][groupsI];
             if (element["GroupName"]==returnData.result.success["jobTitle"]) {
-                jr_set_value('AvailableAmount', element["Amount"]);
+                realAvailableAmount=element["Amount"];
                 jr_set_value('CafeGroup', element["GroupName"]);
             }
         }
     }
+    jr_set_value('AvailableAmount', realAvailableAmount);
     jr_set_value('FirstName', returnData.result.success["firstName"]);
     jr_set_value('LastName', returnData.result.success["lastName"]);
     jr_set_value('JobDescription', returnData.result.success["jobTitle"]);
     jr_set_value('ProbationPeriodEnd', returnData.result.success["ProbationPeriodEnd"]);
-    console.log(returnData.result.success["FirstWDayOfTheYear"]);
     var firstWorkDay=new Date(Date.parse(returnData.result.success["FirstWDayOfTheYear"]));
-    console.log(Date.parse(returnData.result.success["FirstWDayOfTheYear"]));
-    console.log(firstWorkDay);
     jr_set_value('FirstWDayOfTheYear', firstWorkDay);
     var deadline=new Date(Date.parse(returnData.result.success["CafeteriaDeadline"]));
     jr_set_value('CafeteriaDeadline', deadline);
     var startDate = new Date(Date.parse(returnData.result.success["validFrom"]));
-    console.log("itt még jó?22");
     jr_set_value('StartOfContract', returnData.result.success["validFrom"]);
     var validMonthRule=parseInt(returnData.result.success["ValidMonthRule"]);
     jr_set_value('ValidMonthRule', validMonthRule);
@@ -70,6 +69,8 @@ function onDataFromLinkSuccess(returnData){
     jr_set_value('Term', returnData.result.success["TermSelector"]);
     jr_set_value('EqualMonthRule', returnData.result.success["EqualMonthRule"]);
     jr_set_value('ProbationMonthRule', returnData.result.success["ProbationMonthRule"]);
+    realAvailableAmount=Math.floor((realAvailableAmount*validMonths)/12);
+    jr_set_value('RealAvailableAmount', realAvailableAmount);
 
 
     var optionArray=[];
@@ -121,7 +122,8 @@ function InitTable(){
     //I need to count the months that they are viable for eg 10
     //set it into an element into the process table
     var viewName='HU_CAFE_AMOUNTS_TABLE_VIEW';
-    var availableAmount=parseInt(jr_get_value('AvailableAmount'));
+    var availableAmount=parseInt(jr_get_value('RealAvailableAmount'));
+    console.log(availableAmount);
     var showLimit2=false;
     var showLimit3=false;
     var showLimit4=false;

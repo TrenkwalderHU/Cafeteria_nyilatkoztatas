@@ -163,17 +163,17 @@ function checkLimits(currentRowID, columnName)
     var availablePerMonth=Math.floor(availableAmount/validMonthsCount);
     var rowIDs=jr_get_subtable_row_ids(viewName);
     var allMonthsArray=[];
-    allMonthsArray.push(['January',availablePerMonth,0]);
-    allMonthsArray.push(['February',availablePerMonth*2,0]);
-    allMonthsArray.push(['March',availablePerMonth*3,0]);
-    allMonthsArray.push(['April',availablePerMonth*4,0]);
-    allMonthsArray.push(['May',availablePerMonth*5,0]);
-    allMonthsArray.push(['June',availablePerMonth*6,0]);
-    allMonthsArray.push(['July',availablePerMonth*7,0]);
-    allMonthsArray.push(['August',availablePerMonth*8,0]);
-    allMonthsArray.push(['September',availablePerMonth*9,0]);
-    allMonthsArray.push(['October',availablePerMonth*10,0]);
-    allMonthsArray.push(['November',availablePerMonth*11,0]);
+    allMonthsArray.push(['January',availablePerMonth*Math.max(validMonthsCount-11,0),0]);
+    allMonthsArray.push(['February',availablePerMonth*Math.max(validMonthsCount-10,0),0]);
+    allMonthsArray.push(['March',availablePerMonth*Math.max(validMonthsCount-9,0),0]);
+    allMonthsArray.push(['April',availablePerMonth*Math.max(validMonthsCount-8,0),0]);
+    allMonthsArray.push(['May',availablePerMonth*Math.max(validMonthsCount-7,0),0]);
+    allMonthsArray.push(['June',availablePerMonth*Math.max(validMonthsCount-6,0),0]);
+    allMonthsArray.push(['July',availablePerMonth*Math.max(validMonthsCount-5,0),0]);
+    allMonthsArray.push(['August',availablePerMonth*Math.max(validMonthsCount-4,0),0]);
+    allMonthsArray.push(['September',availablePerMonth*Math.max(validMonthsCount-3,0),0]);
+    allMonthsArray.push(['October',availablePerMonth*Math.max(validMonthsCount-2,0),0]);
+    allMonthsArray.push(['November',availablePerMonth*Math.max(validMonthsCount-1,0),0]);
     allMonthsArray.push(['December',availableAmount,0]);
     //Check all limits
     //Go through the rows
@@ -314,17 +314,17 @@ function displaySums(currentRowID, columnName){
     var availablePerMonth=Math.floor(availableAmount/validMonthsCount);
     //Calculate all the sums and remaining values to display them in the table
     var allMonthsArrayForSum=[];
-    allMonthsArrayForSum.push(['January',availablePerMonth,0,'JanuaryGross']);
-    allMonthsArrayForSum.push(['February',availablePerMonth*2,0,'FebruaryGross']);
-    allMonthsArrayForSum.push(['March',availablePerMonth*3,0,'MarchGross']);
-    allMonthsArrayForSum.push(['April',availablePerMonth*4,0,'AprilGross']);
-    allMonthsArrayForSum.push(['May',availablePerMonth*5,0,'MayGross']);
-    allMonthsArrayForSum.push(['June',availablePerMonth*6,0,'JuneGross']);
-    allMonthsArrayForSum.push(['July',availablePerMonth*7,0,'JulyGross']);
-    allMonthsArrayForSum.push(['August',availablePerMonth*8,0,'AugustGross']);
-    allMonthsArrayForSum.push(['September',availablePerMonth*9,0,'SeptemberGross']);
-    allMonthsArrayForSum.push(['October',availablePerMonth*10,0,'OctoberGross']);
-    allMonthsArrayForSum.push(['November',availablePerMonth*11,0,'NovemberGross']);
+    allMonthsArrayForSum.push(['January',availablePerMonth*Math.max(validMonthsCount-11,0),0,'JanuaryGross']);
+    allMonthsArrayForSum.push(['February',availablePerMonth*Math.max(validMonthsCount-10,0),0,'FebruaryGross']);
+    allMonthsArrayForSum.push(['March',availablePerMonth*Math.max(validMonthsCount-9,0),0,'MarchGross']);
+    allMonthsArrayForSum.push(['April',availablePerMonth*Math.max(validMonthsCount-8,0),0,'AprilGross']);
+    allMonthsArrayForSum.push(['May',availablePerMonth*Math.max(validMonthsCount-7,0),0,'MayGross']);
+    allMonthsArrayForSum.push(['June',availablePerMonth*Math.max(validMonthsCount-6,0),0,'JuneGross']);
+    allMonthsArrayForSum.push(['July',availablePerMonth*Math.max(validMonthsCount-5,0),0,'JulyGross']);
+    allMonthsArrayForSum.push(['August',availablePerMonth*Math.max(validMonthsCount-4,0),0,'AugustGross']);
+    allMonthsArrayForSum.push(['September',availablePerMonth*Math.max(validMonthsCount-3,0),0,'SeptemberGross']);
+    allMonthsArrayForSum.push(['October',availablePerMonth*Math.max(validMonthsCount-2,0),0,'OctoberGross']);
+    allMonthsArrayForSum.push(['November',availablePerMonth*Math.max(validMonthsCount-1,0),0,'NovemberGross']);
     allMonthsArrayForSum.push(['December',availableAmount,0,'DecemberGross']);
     var modifiedMonthArray=[];
     for (let rowsI = 0; rowsI < rowIDs.length-1; rowsI++) {
@@ -332,7 +332,7 @@ function displaySums(currentRowID, columnName){
         //console.log(rowsI);
         const rowID = rowIDs[rowsI];
         let sum=0;
-        for (let monthI = 0; monthI < allMonthsArrayForSum.length; monthI++) {
+        for (let monthI = 12-validMonthsCount; monthI < allMonthsArrayForSum.length; monthI++) {
             //console.log("--------------------------------------------------------------------------------hónap sorszáma jelenleg:");
             //console.log(monthI);
             let currentMonthArray = allMonthsArrayForSum[monthI];

@@ -1,14 +1,10 @@
 Most:
-- próbaidős szabályok implementálása
+
 - lehet kell egy összesen bruttó
-- akár azt is lehet, hogy egyenlőnél csak 1 hónapot adunk nekik, és a háttérben másolódik
 - időszakválasztó havi/éves: havinál felszorzom 12-vel (mindkét mező onchange eventjében kiértékelem mi van a másikban és úgy mentem le egy 3. elrejtett mezőbe)
-- tört év kell a legelejére, hogy tudjam, hogy mondjuk januárral ne számoljak
-- igazolatlan távollét esetén nem jár ????? le tudom kérni?
 - további szabályok implementálása
+- átpakolni mywfms-re, a security check nem lesz elég
 - manuális mentés gomb hozzáadása
-- tört évnél nem tehetem be decemberre az egész éveset (ki kell vonnom a hónapokat evvan)
-- letesztelni ha a megjelenítésben 0 tizedes jegy van, lehet-e a háttérben mégis több?
 - Ági által nyújtott Excelt átnézni, a benne lévőket érvényesíteni
 
 végén:
@@ -18,7 +14,6 @@ végén:
 	-lapozást implementálni
 - opciók manage datába, ne kelljen újra és újra kitölteni
 	 helyette inkább opció indításnál, hogy beállítások betöltése
-- átpakolni mywfms-re, a security check nem lesz elég
 - leellenőrizni, hogy az availableamountnál ha manuálisan átírom, akkor el tudom-e küldeni, a rendszert átverve, és ha igen, akkor gátat tenni ehhez a kódba
 	-save cell value ugyanez (hiddensaveCellValue element segítségével)
 	-Személyes adatok ugyanez, elrejtett 2. oldal ugyanez, más nevével lehetne nyilatkozni, stb
@@ -26,9 +21,15 @@ végén:
 PHP-val egy utána lévő szakaszban (mondjuk lépésben) úrja átszámolni az egész café nyilatkozatot, hogy tényleg valid-e.
 - Nexon Import elkészítése
 - Portál dokumentum törlése
+- letesztelni ha a megjelenítésben 0 tizedes jegy van, lehet-e a háttérben mégis több?
 
 
 kész:
+- tört évnél nem tehetem be decemberre az egész éveset (ki kell vonnom a hónapokat evvan)
+- tört év kell a legelejére, hogy tudjam, hogy mondjuk januárral ne számoljak
+- igazolatlan távollét esetén nem jár ????? le tudom kérni? -nem az én dolgom, csak mentsem el a beállítást
+- akár azt is lehet, hogy egyenlőnél csak 1 hónapot adunk nekik, és a háttérben másolódik
+- próbaidős szabályok implementálása (próbaidő után visszamenőleggel nem foglalkoztam, olyan, mintha próbaidő alatt is járna, mert utólag szeretnék nyilatkoztatni)
 - tört éves problémák javítása/ellenőrzése
 - manuális tesztelehetőség felállítása (próbaidő, törthónap tesztelése valós embernek protálra kiküldött példánya nélkül)
 - havi egyenőtlen/havi egyenlő juttatás

@@ -59,7 +59,7 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
         }*/
         while ($row = $externalDB->fetchRow($result)) {
 			$row['TaxID']="HU".$row['TaxID'];
-			$row['Link']="https://jobrouter.trenkwalder.io/jobrouter/?cmd=PublicStart&ps=e1b927e1599a72e58297572b68d5b4fe&username=publicuserHU&taxid=".$row['TaxID']."&processid=".$this->getProcessId();
+			$row['Link']=[jr_link];
             $returnArray[]=$row;
 			//$this->dump($row);
         }

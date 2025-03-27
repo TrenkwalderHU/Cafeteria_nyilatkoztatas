@@ -26,7 +26,12 @@ function onDataFromLinkSuccess(returnData){
     jr_set_value('FirstName', returnData.result.success["firstName"]);
     jr_set_value('LastName', returnData.result.success["lastName"]);
     jr_set_value('JobDescription', returnData.result.success["jobTitle"]);
+    console.log("probation data a következő:");
+    console.log(returnData.result.success["ProbationPeriodEnd"]);
     var probationEnd=new Date(Date.parse(returnData.result.success["ProbationPeriodEnd"]));
+    if (returnData.result.success["ProbationPeriodEnd"]===null) {
+        console.log("ez igy jó?");
+    }
     jr_set_value('ProbationPeriodEnd', probationEnd);
     var firstWorkDay=new Date(Date.parse(returnData.result.success["FirstWDayOfTheYear"]));
     jr_set_value('FirstWDayOfTheYear', firstWorkDay);

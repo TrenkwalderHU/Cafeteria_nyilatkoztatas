@@ -1,9 +1,8 @@
 Most:
-
+- átpakolni mywfms-re, a security check nem lesz elég
 - lehet kell egy összesen bruttó
 - időszakválasztó havi/éves: havinál felszorzom 12-vel (mindkét mező onchange eventjében kiértékelem mi van a másikban és úgy mentem le egy 3. elrejtett mezőbe)
 - további szabályok implementálása
-- átpakolni mywfms-re, a security check nem lesz elég
 - manuális mentés gomb hozzáadása
 - Ági által nyújtott Excelt átnézni, a benne lévőket érvényesíteni
 

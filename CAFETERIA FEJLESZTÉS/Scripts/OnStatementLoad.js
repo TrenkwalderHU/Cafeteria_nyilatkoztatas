@@ -23,16 +23,12 @@ function onDataFromLinkSuccess(returnData){
         }
     }
     jr_set_value('AvailableAmount', realAvailableAmount);
+    jr_set_value('CustomToken', returnData.result.success["customToken"]);
+    jr_set_value('CustomProcessID', returnData.result.success["processID"]);
     jr_set_value('FirstName', returnData.result.success["firstName"]);
     jr_set_value('LastName', returnData.result.success["lastName"]);
     jr_set_value('JobDescription', returnData.result.success["jobTitle"]);
-    console.log("probation data a következő:");
-    console.log(returnData.result.success["ProbationPeriodEnd"]);
     var probationEnd=new Date(Date.parse(returnData.result.success["ProbationPeriodEnd"]));
-    if (returnData.result.success["ProbationPeriodEnd"]===null) {
-        console.log("ez igy jó?");
-    }
-    jr_set_value('ProbationPeriodEnd', probationEnd);
     var firstWorkDay=new Date(Date.parse(returnData.result.success["FirstWDayOfTheYear"]));
     jr_set_value('FirstWDayOfTheYear', firstWorkDay);
     var deadline=new Date(Date.parse(returnData.result.success["CafeteriaDeadline"]));
@@ -43,7 +39,10 @@ function onDataFromLinkSuccess(returnData){
     jr_set_value('ValidMonthRule', validMonthRule);
     var probationRule=returnData.result.success["ProbationMonthRule"];
     jr_set_value('ProbationMonthRule', probationRule);
-
+    if (returnData.result.success["ProbationPeriodEnd"]===null || returnData.result.success["ProbationPeriodEnd"]==="") {
+        probationEnd=startDate;
+    }
+    jr_set_value('ProbationPeriodEnd', probationEnd);
     //We do not care for "After" and "Yes", as they are not relevant
     //After statements only start after the probation period ended
     if (probationRule=="No") {
@@ -83,6 +82,9 @@ function onDataFromLinkSuccess(returnData){
     jr_set_value('TaxingType', returnData.result.success["TaxingTypeSelector"]);
     jr_set_value('Term', returnData.result.success["TermSelector"]);
     jr_set_value('EqualMonthRule', returnData.result.success["EqualMonthRule"]);
+    if (returnData.result.success["TermSelector"]=="havi") {
+        realAvailableAmount=realAvailableAmount*12;
+    }
     realAvailableAmount=Math.floor((realAvailableAmount*validMonths)/12);
     jr_set_value('RealAvailableAmount', realAvailableAmount);
 

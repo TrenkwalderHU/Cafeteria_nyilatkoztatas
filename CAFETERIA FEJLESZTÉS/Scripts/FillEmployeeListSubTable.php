@@ -57,9 +57,81 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
             
             $rowID++;
         }*/
+		$tokenHelperArray=array(
+			"a",
+			"á",
+			"b",
+			"c",
+			"d",
+			"e",
+			"é",
+			"f",
+			"g",
+			"h",
+			"i",
+			"í",
+			"j",
+			"k",
+			"l",
+			"m",
+			"n",
+			"o",
+			"ó",
+			"ö",
+			"ő",
+			"p",
+			"q",
+			"r",
+			"s",
+			"t",
+			"u",
+			"ú",
+			"ü",
+			"ű",
+			"v",
+			"w",
+			"x",
+			"y",
+			"z",
+			"+",
+			"!",
+			"%",
+			"/",
+			"=",
+			"(",
+			")",
+			"0",
+			"1",
+			"2",
+			"3",
+			"4",
+			"5",
+			"6",
+			"7",
+			"8",
+			"9",
+			",",
+			".",
+			"-",
+			"_",
+			"$",
+			"ß",
+			"÷",
+			"<",
+			">",
+			"&",
+			"@",
+		);
         while ($row = $externalDB->fetchRow($result)) {
+			$token="";
+			for ($j=0; $j < 8; $j++) {
+				$randomNum=rand(0,count($tokenHelperArray)-1);
+				$token.=$tokenHelperArray[$randomNum];
+			}
+			$token=rawurlencode($token);
 			$row['TaxID']="HU".$row['TaxID'];
-			$row['Link']=[jr_link];
+			$row['CustomToken']=$token;
+			$row['Link']="https://jobrouter.trenkwalder.io/jobrouter/?cmd=PublicStart&ps=e1b927e1599a72e58297572b68d5b4fe&username=publicuserHU&token=".$token."&taxid=".$row['TaxID']."&processid=".$this->getProcessId();
             $returnArray[]=$row;
 			//$this->dump($row);
         }

@@ -1,3 +1,18 @@
+2025.03.30
+- Ha nem éves, hanem havi keretet határoznak meg, akkor azt felszorzom 12-vel, és úgy mentem le. Attól még, a kitöltés lépésben az eredeti havi összeget mutassam, vagy a felszorzott teljeset? Ha a havi összeget, akkor utánategyem, hogy /hó?
+
+
+
+- Kitöltés lépésben mindenképpen a szabályzatban megítélt keretösszeget tüntetem fel, akkor is, ha tört év van, és kevesebbet vehet fel az illető (a táblázatban már a kisebb összeg szerepel), ezt így kell, ugye? (a belsős excelünkben így működött)
+
+
+-nettó/szuperbruttó megjelenítése hogyan legyen?
+
+
+
+
+
+
 2025.03.05-06
 - Ha más cégnél vett föl szépet, vagy kúltúrát, stb, azt honnan tudjuk meg, ez fontos?
 	- nem kell vele foglalkoznom

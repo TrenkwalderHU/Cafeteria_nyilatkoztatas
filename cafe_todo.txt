@@ -1,8 +1,7 @@
 Most:
-- átpakolni mywfms-re, a security check nem lesz elég
+
+-nettó, szuperbruttó megjelenítési hiba
 - lehet kell egy összesen bruttó
-- időszakválasztó havi/éves: havinál felszorzom 12-vel (mindkét mező onchange eventjében kiértékelem mi van a másikban és úgy mentem le egy 3. elrejtett mezőbe)
-- további szabályok implementálása
 - manuális mentés gomb hozzáadása
 - Ági által nyújtott Excelt átnézni, a benne lévőket érvényesíteni
 
@@ -24,6 +23,9 @@ PHP-val egy utána lévő szakaszban (mondjuk lépésben) úrja átszámolni az 
 
 
 kész:
+- további szabályok implementálása
+- időszakválasztó havi/éves: havinál felszorzom 12-vel
+- átpakolni mywfms-re, a security check nem lesz elég / token rendszert bevezettem az internalba, ez is jó lehet?
 - tört évnél nem tehetem be decemberre az egész éveset (ki kell vonnom a hónapokat evvan)
 - tört év kell a legelejére, hogy tudjam, hogy mondjuk januárral ne számoljak
 - igazolatlan távollét esetén nem jár ????? le tudom kérni? -nem az én dolgom, csak mentsem el a beállítást

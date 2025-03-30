@@ -1,7 +1,9 @@
 function OnChangeCafeAmount(currentRowID,columnName){
     //Need to get the valid months value from the form element
-    //de ez itt megint security issue
-    //át tudja ő írni a validmonths, és akkor máshogy számol a changecafé
+    //security issue here
+    //he can force modify valid months, and the calcuation will vastly differ
+    //he can modify term type
+    //he can modify taxing type
     var selectAmountRule=jr_get_value('EqualMonthRule');
     if (selectAmountRule=="egyenlőtlen juttatás összeg választható időarányosan") {
         differentAmounts(currentRowID,columnName);
@@ -24,6 +26,7 @@ function sameAmounts(currentRowID,columnName){
     var originalValue=parseInt(jr_get_value('SaveCellValueHelper'));
     var availableAmount=parseInt(jr_get_value('RealAvailableAmount'));
     var validMonthsCount=parseInt(jr_get_value('ValidMonthsCount'));
+    var taxingType=jr_get_value('TaxingType');
     if (isNaN(originalValue)){
         originalValue=0;
     }
@@ -44,6 +47,13 @@ function sameAmounts(currentRowID,columnName){
         }
         let multiplier=Number(jr_get_subtable_value(viewName, rowID, "Multiplier"));
         let grossModifiedValue=Math.floor(value*multiplier);
+        if (taxingType=="nettó") {
+            grossModifiedValue=value;
+        }
+        else if(taxingType=="szuperbruttó")
+        {
+            grossModifiedValue=Math.floor(grossModifiedValue*1.13);
+        }
         sum+=grossModifiedValue;
         if (sum>availablePerMonth) {
             jr_set_subtable_value(viewName, currentRowID, columnName, originalValue);
@@ -83,7 +93,6 @@ function sameAmounts(currentRowID,columnName){
 
         var firstMonthLimitRelevantMonthsCount=monthsLimit-(12-validMonthsCount);
         if (value*firstMonthLimitRelevantMonthsCount>amountLimit && amountLimit>0) {
-            //ez még nem számít a nem éves limitekkel, pl szép aktív, vagy rosszabbak
             jr_set_subtable_value(viewName, currentRowID, columnName, originalValue);
             //Exits if the value has been exceeded
             jr_notify_warn('Átlépted a '+ optionName + '-ból/ből a megengedett keretedet, az 1. időszakban ezért visszaállítottuk a legutóbb megadott értéket!', 10);
@@ -97,7 +106,6 @@ function sameAmounts(currentRowID,columnName){
             secondMonthLimitRelevantMonthsCount=0;
         }
         if (value*secondMonthLimitRelevantMonthsCount>amountLimit2 && amountLimit2>0) {
-            //ez még nem számít a nem éves limitekkel, pl szép aktív, vagy rosszabbak
             jr_set_subtable_value(viewName, currentRowID, columnName, originalValue);
             //Exits if the value has been exceeded
             jr_notify_warn('Átlépted a '+ optionName + '-ból/ből a megengedett keretedet, a 2. időszakban ezért visszaállítottuk a legutóbb megadott értéket!', 10);
@@ -111,7 +119,6 @@ function sameAmounts(currentRowID,columnName){
             thirdMonthLimitRelevantMonthsCount=0;
         }
         if (value*thirdMonthLimitRelevantMonthsCount>amountLimit3 && amountLimit3>0) {
-            //ez még nem számít a nem éves limitekkel, pl szép aktív, vagy rosszabbak
             jr_set_subtable_value(viewName, currentRowID, columnName, originalValue);
             //Exits if the value has been exceeded
             jr_notify_warn('Átlépted a '+ optionName + '-ból/ből a megengedett keretedet, a 3. időszakban ezért visszaállítottuk a legutóbb megadott értéket!', 10);
@@ -121,7 +128,6 @@ function sameAmounts(currentRowID,columnName){
         var fourthMonthLimitRelevantMonthsCount=monthsLimit+monthsLimit2+monthsLimit3+monthsLimit4-(12-validMonthsCount);
         fourthMonthLimitRelevantMonthsCount=Math.min(fourthMonthLimitRelevantMonthsCount, monthsLimit4);
         if (value*fourthMonthLimitRelevantMonthsCount>amountLimit4 && amountLimit4>0) {
-            //ez még nem számít a nem éves limitekkel, pl szép aktív, vagy rosszabbak
             jr_set_subtable_value(viewName, currentRowID, columnName, originalValue);
             //Exits if the value has been exceeded
             jr_notify_warn('Átlépted a '+ optionName + '-ból/ből a megengedett keretedet, a 4. időszakban ezért visszaállítottuk a legutóbb megadott értéket!', 10);
@@ -146,7 +152,8 @@ function sameAmounts(currentRowID,columnName){
             value=0;
         }
         let multiplier=Number(jr_get_subtable_value(viewName, currentRowID, "Multiplier"));
-        jr_set_subtable_value(viewName, currentRowID, "DecemberGross", Math.floor(value*multiplier));
+        let grossModifiedValue=Math.floor(value*multiplier);
+        jr_set_subtable_value(viewName, currentRowID, "DecemberGross", Math.floor(grossModifiedValue));
     }
 }
 
@@ -156,6 +163,7 @@ function checkLimits(currentRowID, columnName)
     var originalValue=parseInt(jr_get_value('SaveCellValueHelper'));
     var availableAmount=parseInt(jr_get_value('RealAvailableAmount'));
     var validMonthsCount=parseInt(jr_get_value('ValidMonthsCount'));
+    var taxingType=jr_get_value('TaxingType');
     if (isNaN(originalValue)){
         originalValue=0;
     }
@@ -226,7 +234,13 @@ function checkLimits(currentRowID, columnName)
             }
             let multiplier=Number(jr_get_subtable_value(viewName, rowID, "Multiplier"));
             let grossModifiedValue=Math.floor(value*multiplier);
-
+            if (taxingType=="nettó") {
+                grossModifiedValue=value;
+            }
+            else if(taxingType=="szuperbruttó")
+            {
+                grossModifiedValue=Math.floor(grossModifiedValue*1.13);
+            }
             if (monthI<monthsLimit) {
                 sum+=value;
                 if (sum>amountLimit && amountLimit>0) {
@@ -378,7 +392,8 @@ function displaySums(currentRowID, columnName){
         value=0;
     }
     let multiplier=Number(jr_get_subtable_value(viewName, currentRowID, "Multiplier"));
+    let grossModifiedValue=Math.floor(value*multiplier);
     if (modifiedMonthArray.length>0) {
-        jr_set_subtable_value(viewName, currentRowID, modifiedMonthArray[3], Math.floor(value*multiplier));
+        jr_set_subtable_value(viewName, currentRowID, modifiedMonthArray[3], Math.floor(grossModifiedValue));
     }
 }

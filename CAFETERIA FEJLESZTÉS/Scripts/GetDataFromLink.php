@@ -52,6 +52,7 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
 	    $isTest=$this->getTableValue("isTest");
         if ($isTest==1){
             $returnArray["taxID"]=12345678;
+            $returnArray["token"]="test";
             $returnArray["jobTitle"]="Tesztelő";
             $returnArray["firstName"]="Teszt";
             $returnArray["lastName"]="Elek";
@@ -87,6 +88,10 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
             parse_str($queryString, $params);
             $taxID = $params['taxid'];
             $processID = $params['processid'];
+            $token = $params['token'];
+            $returnArray['taxID']=$taxID;
+            $returnArray['customToken']=$token;
+            $returnArray['processID']=$processID;
             
             //get employee data from DB
             $sql = "SELECT * FROM HU_CAFE_EMPLOYEEDATA where step_id = (select MAX(step_id) as stepid FROM HU_CAFETERIA_NYILATK where processid='".$processID."') and taxID='".$taxID."'";

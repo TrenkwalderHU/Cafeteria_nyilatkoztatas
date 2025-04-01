@@ -50,10 +50,6 @@ function sameAmounts(currentRowID,columnName){
         if (taxingType=="nettó") {
             grossModifiedValue=value;
         }
-        else if(taxingType=="szuperbruttó")
-        {
-            grossModifiedValue=Math.floor(grossModifiedValue*1.13);
-        }
         sum+=grossModifiedValue;
         if (sum>availablePerMonth) {
             jr_set_subtable_value(viewName, currentRowID, columnName, originalValue);
@@ -237,10 +233,6 @@ function checkLimits(currentRowID, columnName)
             if (taxingType=="nettó") {
                 grossModifiedValue=value;
             }
-            else if(taxingType=="szuperbruttó")
-            {
-                grossModifiedValue=Math.floor(grossModifiedValue*1.13);
-            }
             if (monthI<monthsLimit) {
                 sum+=value;
                 if (sum>amountLimit && amountLimit>0) {
@@ -325,6 +317,7 @@ function displaySums(currentRowID, columnName){
     var rowIDs=jr_get_subtable_row_ids(viewName);
     var availableAmount=parseInt(jr_get_value('RealAvailableAmount'));
     var validMonthsCount=parseInt(jr_get_value('ValidMonthsCount'));
+    var taxingType=jr_get_value('TaxingType');
     var availablePerMonth=Math.floor(availableAmount/validMonthsCount);
     //Calculate all the sums and remaining values to display them in the table
     var allMonthsArrayForSum=[];
@@ -359,6 +352,9 @@ function displaySums(currentRowID, columnName){
             }
             let multiplier=Number(jr_get_subtable_value(viewName, rowID, "Multiplier"));
             let grossModifiedValue=Math.floor(value*multiplier);
+            if (taxingType=="nettó") {
+                grossModifiedValue=value;
+            }
             //console.log("bruttósított érték:");
             //console.log(grossModifiedValue);
             sum+=value;

@@ -43,22 +43,23 @@ function onDataFromLinkSuccess(returnData){
         probationEnd=startDate;
     }
     jr_set_value('ProbationPeriodEnd', probationEnd);
+    var statementStartDate=startDate;
     //We do not care for "After" and "Yes", as they are not relevant
     //After statements only start after the probation period ended
-    if (probationRule=="No") {
-        startDate=probationEnd;
+    if (probationRule=="No" || probationRule=="After") {
+        statementStartDate=probationEnd;
     }
 
     var validMonths=0;
-    var startYear= startDate.getFullYear();
+    var startYear= statementStartDate.getFullYear();
     var currentYear= firstWorkDay.getFullYear();
     if (startYear<currentYear) {
         validMonths=12;
     }
     else
     {
-        var startMonth=startDate.getMonth();
-        var startContractDay=startDate.getDate();
+        var startMonth=statementStartDate.getMonth();
+        var startContractDay=statementStartDate.getDate();
         if (startContractDay<validMonthRule) { //2 or 16
             //handle 30/days time based rules/systems
             //We will cross the bridge when we get to it
@@ -85,7 +86,43 @@ function onDataFromLinkSuccess(returnData){
     if (returnData.result.success["TermSelector"]=="havi") {
         realAvailableAmount=realAvailableAmount*12;
     }
+
+    //If its after probation, we need to recalculate the months from the start of contract to see the validmonths and amount
+    //We still had to disable the probation months in the code above
+    if(probationRule=="After")
+    {
+        validMonths=0;
+        startYear= startDate.getFullYear();
+        currentYear= firstWorkDay.getFullYear();
+        if (startYear<currentYear) {
+            validMonths=12;
+        }
+        else
+        {
+            startMonth=startDate.getMonth();
+            startContractDay=startDate.getDate();
+            if (startContractDay<validMonthRule) { //2 or 16
+                //handle 30/days time based rules/systems
+                //We will cross the bridge when we get to it
+                validMonths=12-startMonth;
+            }
+            else
+            {
+                firstDayOfYear=firstWorkDay.getDate();
+                if (startMonth==0 && startContractDay<=firstDayOfYear) {
+                    validMonths=12;
+                }
+                else
+                {
+                    validMonths=11-startMonth;
+                }
+            }
+        }
+    }
     realAvailableAmount=Math.floor((realAvailableAmount*validMonths)/12);
+    if (returnData.result.success["TaxingTypeSelector"]=="szuperbruttó") {
+        realAvailableAmount=Math.floor(realAvailableAmount/1.13);
+    }
     jr_set_value('RealAvailableAmount', realAvailableAmount);
 
 

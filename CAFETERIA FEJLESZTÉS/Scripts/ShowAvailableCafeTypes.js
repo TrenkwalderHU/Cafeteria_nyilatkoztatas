@@ -20,4 +20,5 @@ function ShowAvailableCafeTypes()
     jr_show('StudentLoanSupport');
     jr_show('ZooTicket');
     jr_show('HousingSupport');
+    jr_show('LowCostPresent');
 }

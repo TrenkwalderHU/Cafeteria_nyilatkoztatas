@@ -20,6 +20,7 @@ function OnSettingsSubmit(){
     let value18=jr_get_value('StudentLoanSupport');
     let value19=jr_get_value('ZooTicket');
     let value20=jr_get_value('HousingSupport');
+    let value20=jr_get_value('LowCostPresent');
     canSendStep+=value;
     canSendStep+=value2;
     canSendStep+=value3;

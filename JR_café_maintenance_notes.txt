@@ -1,5 +1,8 @@
 -Egy új juttatás esetén fel kell azt venni 
 1, manage datába, 
 2, az első lépés formjára
-3, a ShowAvailableCafeTypes scriptbe
-4, az OnSettingsSubmit scriptbe
+3, a manuál test formjára
+4, ShowAvailableCafeTypes scriptbe
+5, OnSettingsSubmit scriptbe
+	b, a kódban lejjebb, a canSendStepnél is felvenni +1 sort
+6, OnSettingsLoad scriptbe

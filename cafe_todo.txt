@@ -1,11 +1,11 @@
 Most:
 
--nettó, szuperbruttó megjelenítési hiba
-- lehet kell egy összesen bruttó
-- manuális mentés gomb hozzáadása
-- Ági által nyújtott Excelt átnézni, a benne lévőket érvényesíteni
+- jóváhagyó lépés, és a módosítás lépés implementálása
+
 
 végén:
+- manuális mentés gomb hozzáadása
+- adathackeléskor szóljon a HRreferensnek
 - behúzni, Hr referens=Project Manager,Payrollert mind2-t adatbázisból
 - Dolgozó lista táblában alul névre keresés, vagy adóazonosítóra keresés, belépés dátuma tól-ig kereshető legyen
 	-összes találat számát kijelezni
@@ -23,6 +23,16 @@ PHP-val egy utána lévő szakaszban (mondjuk lépésben) úrja átszámolni az 
 
 
 kész:
+
+- Ági által nyújtott Excelt átnézni, a benne lévőket érvényesíteni
+- kódban elágaztatni, az utolsó sor maradékát nettó esetén, és a szuperbruttónál ugyanez (vagy előreszámolni)
+- szuperbruttónál lehetne a legelején a keretösszeget leosztani, és úgy számolni bruttót
+- próbaidő után visszamenőleg jár fixálása (ne tudjon az elmúlt hónapokra nyilatkozni)
+- munkábajárás elírásának javítása
+- jutattási opciók visszanézve ne legyenek elrejtve
+- ebben az évben felhasználható összeg mezőt felvenni a keretösszeg alá pluszban
+- Cafeteria éves keretösszeg, nem éves, csak keretösszeg
+- Form kitöltése lépést csaka publicuser-nek adni
 - további szabályok implementálása
 - időszakválasztó havi/éves: havinál felszorzom 12-vel
 - átpakolni mywfms-re, a security check nem lesz elég / token rendszert bevezettem az internalba, ez is jó lehet?

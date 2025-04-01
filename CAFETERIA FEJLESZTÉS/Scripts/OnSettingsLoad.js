@@ -1,0 +1,23 @@
+function OnSettingsLoad(){
+    jr_hide('SZEPUnderLimit');
+    jr_hide('SZEPAboveLimit');
+    jr_hide('SZEPActive');
+    jr_hide('CultureTicket');
+    jr_hide('SportTicket');
+    jr_hide('KindergartenAllowance');
+    jr_hide('VirusTestAndVaccine');
+    jr_hide('BicycleUsage');
+    jr_hide('CarSharing');
+    jr_hide('HomeOfficeAllowance');
+    jr_hide('WineProducts');
+    jr_hide('GroupRiskInsurances');
+    jr_hide('CheckoutPayments');
+    jr_hide('VolunteerMemberFee');
+    jr_hide('MoneyAllowance');
+    jr_hide('CommuteRefund');
+    jr_hide('GlassesRefund');
+    jr_hide('StudentLoanSupport');
+    jr_hide('ZooTicket');
+    jr_hide('HousingSupport');
+    jr_hide('LowCostPresent');
+}

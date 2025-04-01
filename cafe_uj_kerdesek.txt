@@ -1,13 +1,14 @@
 2025.03.30
 - Ha nem éves, hanem havi keretet határoznak meg, akkor azt felszorzom 12-vel, és úgy mentem le. Attól még, a kitöltés lépésben az eredeti havi összeget mutassam, vagy a felszorzott teljeset? Ha a havi összeget, akkor utánategyem, hogy /hó?
-
+	- A plusz sor megoldja, jó így
 
 
 - Kitöltés lépésben mindenképpen a szabályzatban megítélt keretösszeget tüntetem fel, akkor is, ha tört év van, és kevesebbet vehet fel az illető (a táblázatban már a kisebb összeg szerepel), ezt így kell, ugye? (a belsős excelünkben így működött)
+	- Igen, legyen +1 sor a valósan az adott évre felvehető maximumról
 
 
--nettó/szuperbruttó megjelenítése hogyan legyen?
-
+- nettó/szuperbruttó megjelenítése hogyan legyen?
+	- Nettónak külön logika kódban, szuperbruttót levonhatom előre
 
 
 

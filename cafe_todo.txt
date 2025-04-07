@@ -1,7 +1,9 @@
 Most:
 
-- jóváhagyó lépés, és a módosítás lépés implementálása
-
+- valamiért DW-ből nem akar törölni, beszélni Viktorral
+- pingpong javítása
+- jóváhagyásnál is legyenek formázások a táblán
+- havi egyenlőnél jelenleg csak 1 hónapra írja be, legyen másolva utólag
 
 végén:
 - manuális mentés gomb hozzáadása
@@ -24,6 +26,9 @@ PHP-val egy utána lévő szakaszban (mondjuk lépésben) úrja átszámolni az 
 
 kész:
 
+- le kell tesztelnem, hogy a disabled JS-ben hogyan müködik, tudok-e value-t változtatni
+- táblázat lementése valahogy pdf-be
+- jóváhagyó lépés, és a módosítás lépés implementálása
 - Ági által nyújtott Excelt átnézni, a benne lévőket érvényesíteni
 - kódban elágaztatni, az utolsó sor maradékát nettó esetén, és a szuperbruttónál ugyanez (vagy előreszámolni)
 - szuperbruttónál lehetne a legelején a keretösszeget leosztani, és úgy számolni bruttót

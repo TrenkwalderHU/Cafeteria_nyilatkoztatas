@@ -48,11 +48,13 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
 
         $options=[];
         $groups=[];
+        $table=[];
 
 	    $isTest=$this->getTableValue("isTest");
+        $returnArray["isTest"]=$isTest;
         if ($isTest==1){
             $returnArray["taxID"]=12345678;
-            $returnArray["token"]="test";
+            $returnArray["customToken"]="test";
             $returnArray["jobTitle"]="Tesztelő";
             $returnArray["firstName"]="Teszt";
             $returnArray["lastName"]="Elek";
@@ -69,13 +71,16 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
             $returnArray["EqualMonthRule"]=$this->getTableValue("EqualMonthRule");
             $returnArray["ProbationMonthRule"]=$this->getTableValue("ProbationMonthRule");
             $returnArray["ValidMonthRule"]=$this->getTableValue("ValidMonthRule");
+            $returnArray["Corrections"]=$this->getTableValue("Corrections");
             $returnArray["CafeteriaDeadline"]='2050-01-01';
-
-            //check which of the available options were selected and load them into the array
-            foreach ($availableOptions as $option) {
-                $optionNeeded=$this->getTableValue($option->optionName);
-                if ($optionNeeded==1) {
-                    array_push($options,$option);
+            $corrections=$this->getTableValue("Corrections");
+            if ($corrections==0) {
+                //check which of the available options were selected and load them into the array
+                foreach ($availableOptions as $option) {
+                    $optionNeeded=$this->getTableValue($option->optionName);
+                    if ($optionNeeded==1) {
+                        array_push($options,$option);
+                    }
                 }
             }
         }
@@ -94,7 +99,7 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
             $returnArray['processID']=$processID;
             
             //get employee data from DB
-            $sql = "SELECT * FROM HU_CAFE_EMPLOYEEDATA where step_id = (select MAX(step_id) as stepid FROM HU_CAFETERIA_NYILATK where processid='".$processID."') and taxID='".$taxID."'";
+            $sql = "SELECT * FROM HU_CAFE_EMPLOYEEDATA where step_id = (select MAX(step_id) as stepid FROM HU_CAFETERIA_NYILATK where processid='".$processID."') and customToken='".rawurlencode($token)."' and taxID='".$taxID."'";
             $this->alert($sql);
             $result = $jobDB->query($sql);
             if ($result === false) {
@@ -124,12 +129,13 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
             }
             while ($row = $jobDB->fetchRow($result)) {
                 $this->dump($row);
-
-                //check which of the available options were selected and load them into the array
-                foreach ($availableOptions as $option) {
-                    $optionNeeded=$row[$option->optionName];
-                    if ($optionNeeded==1) {
-                        array_push($options,$option);
+                if ($row['Corrections']==0) {
+                    //check which of the available options were selected and load them into the array
+                    foreach ($availableOptions as $option) {
+                        $optionNeeded=$row[$option->optionName];
+                        if ($optionNeeded==1) {
+                            array_push($options,$option);
+                        }
                     }
                 }
                 $returnArray["CafeGroupSelector"]=$row['CafeGroupSelector'];
@@ -152,6 +158,7 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
                 $returnArray["EqualMonthRule"]=$row['EqualMonthRule'];
                 $returnArray["ProbationMonthRule"]=$row['ProbationMonthRule'];
                 $returnArray["ValidMonthRule"]=$row['ValidMonthRule'];
+                $returnArray["Corrections"]=$row['Corrections'];
             }
             //if we need to get the cafe title groups and amounts
             if ($returnArray["CafeGroupSelector"]>0) {
@@ -167,9 +174,57 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
                     array_push($groups,$row);
                 }
             }
+
+            if ($row['Corrections']>0) {
+                $sql = "SELECT [February]
+                            ,[CafeName]
+                            ,[January]
+                            ,[March]
+                            ,[April]
+                            ,[May]
+                            ,[June]
+                            ,[July]
+                            ,[August]
+                            ,[September]
+                            ,[October]
+                            ,[November]
+                            ,[December]
+                            ,[Sum]
+                            ,[Multiplier]
+                            ,[LimitPeriod1]
+                            ,[LimitPeriod2]
+                            ,[LimitPeriod3]
+                            ,[LimitPeriod4]
+                            ,[JanuaryGross]
+                            ,[FebruaryGross]
+                            ,[MarchGross]
+                            ,[AprilGross]
+                            ,[MayGross]
+                            ,[JuneGross]
+                            ,[JulyGross]
+                            ,[AugustGross]
+                            ,[SeptemberGross]
+                            ,[OctoberGross]
+                            ,[NovemberGross]
+                            ,[DecemberGross]
+                            ,[LimitAmount1]
+                            ,[LimitAmount2]
+                            ,[LimitAmount3]
+                            ,[LimitAmount4]
+                FROM HU_CAFE_AMOUNTS_TABL where step_id='".$stepID."'";
+                $this->alert($sql);
+                $result = $jobDB->query($sql);
+                if ($result === false) {
+                    throw new JobRouterException($jobDB->getErrorMessage());
+                }
+                while ($row = $jobDB->fetchRow($result)) {
+                    array_push($table,$row);
+                }
+            }
         }
         $returnArray["Groups"]=$groups;
         $returnArray["Options"]=$options;
+        $returnArray["Table"]=$table;
         $this->setReturnValue('success', $returnArray);
 	}
 }

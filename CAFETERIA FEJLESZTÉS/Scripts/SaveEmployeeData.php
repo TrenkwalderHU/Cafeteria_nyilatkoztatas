@@ -9,7 +9,7 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\RuleExecutionFuncti
         $url="";
         $jobDB = $this->getJobDB();
         $sql = "SELECT * FROM HU_Cafe_Helper
-                where processID='".$newProcessID."'";
+                where newProcessID='".$newProcessID."'";
         $this->alert($sql);
         $result = $jobDB->query($sql);
         if ($result === false) {
@@ -41,14 +41,14 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\RuleExecutionFuncti
             $jobDB2 = $this->getJobDB();
             $sql2 = "INSERT INTO HU_CAFE_EMPLOYEEDATA
                 VALUES ('".$newProcessID."', '".$newStepID."', 1, '".$row["email"]."', '".$row["taxID"]."', '".$url."', 1, '".$row["jobTitle"]."'
-                , '".$row["firstName"]."', '".$row["lastName"]."', '".$row["validFrom"]."', '".$row["validTo"]."', '".$row["birthName"]."', '".$row["ProbationPeriodEnd"]."', '".$row["customToken"]."')";
+                , '".$row["firstName"]."', '".$row["lastName"]."', '".$row["validTo"]."', '".$row["validFrom"]."', '".$row["birthName"]."', '".$row["ProbationPeriodEnd"]."', '".$row["customToken"]."')";
             $result2 = $jobDB2->exec($sql2);
             if ($result2 === false) {
                 throw new JobRouterException($jobDB2->getErrorMessage());
             }
             else
             {
-                $this->alert("Sikeresen beszurtam a sort a dolgozo adatairol a kesobbi javitasokhoz");
+                $this->alert("Inserted the employee's data into the subtable");
             }
         }
 	}

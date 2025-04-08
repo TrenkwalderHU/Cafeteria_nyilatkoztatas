@@ -1,7 +1,6 @@
 Most:
 
-- valamiért DW-ből nem akar törölni, beszélni Viktorral
-- pingpong javítása
+- amikor ismét megkapja javításra, akkor is legyenek formázások a táblán
 - jóváhagyásnál is legyenek formázások a táblán
 - havi egyenlőnél jelenleg csak 1 hónapra írja be, legyen másolva utólag
 
@@ -26,6 +25,10 @@ PHP-val egy utána lévő szakaszban (mondjuk lépésben) úrja átszámolni az 
 
 kész:
 
+- pingpong javítása
+- "nincs tört havi szabály" felvétele
+- valamiért DW-ből nem akar törölni, beszélni Viktorral
+- "nincs próbaidő", ha az van kijelölve, akkor ne kelljen megadni a teszt felületen
 - le kell tesztelnem, hogy a disabled JS-ben hogyan müködik, tudok-e value-t változtatni
 - táblázat lementése valahogy pdf-be
 - jóváhagyó lépés, és a módosítás lépés implementálása

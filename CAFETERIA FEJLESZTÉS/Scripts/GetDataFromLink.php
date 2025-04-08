@@ -24,7 +24,7 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
         //get cafe options from jobdata
         $jobDB = $this->getJobDB();
         $sql = "SELECT * FROM HU_CAFE_OPTIONS";
-        $this->alert($sql);
+        //$this->alert($sql);
         $result = $jobDB->query($sql);
         if ($result === false) {
             throw new JobRouterException($jobDB->getErrorMessage());
@@ -46,6 +46,18 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
             array_push($availableOptions,$co);
         }
 
+        $corrections="";
+        $processID=$this->getProcessId();
+        $sql = "SELECT * FROM HU_Cafe_Helper where newProcessID='".$processID."'";
+        //$this->alert($sql);
+        $result = $jobDB->query($sql);
+        if ($result === false) {
+            throw new JobRouterException($jobDB->getErrorMessage());
+        }
+        while ($row = $jobDB->fetchRow($result)) {
+            $corrections=$row["corrections"];
+        }
+        $returnArray["Corrections"]=$corrections;
         $options=[];
         $groups=[];
         $table=[];
@@ -71,9 +83,7 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
             $returnArray["EqualMonthRule"]=$this->getTableValue("EqualMonthRule");
             $returnArray["ProbationMonthRule"]=$this->getTableValue("ProbationMonthRule");
             $returnArray["ValidMonthRule"]=$this->getTableValue("ValidMonthRule");
-            $returnArray["Corrections"]=$this->getTableValue("Corrections");
             $returnArray["CafeteriaDeadline"]='2050-01-01';
-            $corrections=$this->getTableValue("Corrections");
             if ($corrections==0) {
                 //check which of the available options were selected and load them into the array
                 foreach ($availableOptions as $option) {
@@ -106,7 +116,7 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
                 throw new JobRouterException($jobDB->getErrorMessage());
             }
             while ($row = $jobDB->fetchRow($result)) {
-                $this->dump($row);
+                //$this->dump($row);
                 $taxID=substr($row["taxID"],2);
                 $returnArray["taxID"]=$taxID;
                 $returnArray["jobTitle"]=$row["jobTitle"];
@@ -122,14 +132,14 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
 
             //get process table data from the process table
             $sql = "SELECT * FROM HU_CAFETERIA_NYILATK where step_id='".$stepID."'";
-            $this->alert($sql);
+            //$this->alert($sql);
             $result = $jobDB->query($sql);
             if ($result === false) {
                 throw new JobRouterException($jobDB->getErrorMessage());
             }
             while ($row = $jobDB->fetchRow($result)) {
-                $this->dump($row);
-                if ($row['Corrections']==0) {
+                //$this->dump($row);
+                if ($corrections==0) {
                     //check which of the available options were selected and load them into the array
                     foreach ($availableOptions as $option) {
                         $optionNeeded=$row[$option->optionName];
@@ -142,7 +152,6 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
                 $returnArray["TermSelector"]=$row['TermSelector'] ;
                 $returnArray["TargetSelector"]=$row['TargetSelector'] ;
                 $returnArray["TaxingTypeSelector"]=$row['TaxingTypeSelector'] ;
-                $returnArray["NoValidMonthRules"]=$row['NoValidMonthRules'] ;
                 $returnArray["UnjustifiedAbsence"]=$row['UnjustifiedAbsence'] ;
                 $returnArray["NumberOfUnjustifiedA"]=$row['NumberOfUnjustifiedA'] ;
                 $returnArray["CafeteriaDeadline"]=$row['CafeteriaDeadline'] ;
@@ -158,7 +167,7 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
                 $returnArray["EqualMonthRule"]=$row['EqualMonthRule'];
                 $returnArray["ProbationMonthRule"]=$row['ProbationMonthRule'];
                 $returnArray["ValidMonthRule"]=$row['ValidMonthRule'];
-                $returnArray["Corrections"]=$row['Corrections'];
+                $returnArray["Corrections"]=$corrections;
             }
             //if we need to get the cafe title groups and amounts
             if ($returnArray["CafeGroupSelector"]>0) {
@@ -175,7 +184,7 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
                 }
             }
 
-            if ($row['Corrections']>0) {
+            if ($corrections>0) {
                 $sql = "SELECT [February]
                             ,[CafeName]
                             ,[January]
@@ -211,7 +220,7 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
                             ,[LimitAmount2]
                             ,[LimitAmount3]
                             ,[LimitAmount4]
-                FROM HU_CAFE_AMOUNTS_TABL where step_id='".$stepID."'";
+                FROM HU_CAFE_AMOUNTS_TABL where step_id = (select MAX(step_id) as stepid FROM HU_CAFE_EMPLOYEEDATA where link='".$url."')";
                 $this->alert($sql);
                 $result = $jobDB->query($sql);
                 if ($result === false) {

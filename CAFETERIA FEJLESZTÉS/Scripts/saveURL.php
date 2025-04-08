@@ -1,52 +1,40 @@
 <?php
 
-class className extends JobRouter\Engine\Runtime\PhpFunction\StepInitializationFunction
+class className extends JobRouter\Engine\Runtime\PhpFunction\RuleExecutionFunction
 {
 	public function execute($rowId = null)
 	{
-        $newProcessID=$this->getProcessId();
-	    $actual_link = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-        $rowsFound=0;
+        $processID=$this->getProcessId();
+        $cafeInstanceArray=[];
+        
+        //get the url links from the JR db
         $jobDB = $this->getJobDB();
-        $sql = "SELECT * FROM [HU_Cafe_Helper]
-                where urlLink ='".$actual_link."'";
+        $sql = "SELECT * FROM HU_CAFE_EMPLOYEEDATA
+                where step_id = (
+                        select MAX(step_id) as stepid FROM HU_CAFETERIA_NYILATK 
+                        where processid='".$processID."')";
         $this->alert($sql);
         $result = $jobDB->query($sql);
         if ($result === false) {
             throw new JobRouterException($jobDB->getErrorMessage());
         }
         while ($row = $jobDB->fetchRow($result)) {
-            $this->dump($row);
-            $corrections=$row["corrections"];
-            $corrections++;
-            $sql = "UPDATE HU_Cafe_Helper
-                    SET corrections = ".$corrections."
-                    WHERE urlLink='".$actual_link."'";
-            $this->alert($sql);
-            $result = $jobDB->exec($sql);
-            if ($result === false) {
-                throw new JobRouterException($jobDB->getErrorMessage());
-            }
-            else {
-                $this->alert("Corrections has been incremented in the helper table");
-            }
-            
-            $rowsFound++;
+            //$this->dump($row);
+            $cafeInstanceArray[]=$row;
         }
-        if ($rowsFound==0) {
-            $sql = "INSERT INTO [dbo].[HU_Cafe_Helper]
-                ([processID],[urlLink])
-            VALUES
-                ('".$newProcessID."', '".$actual_link."')";
+
+        //insert a new row for each employee's cafe instance into the DB
+        foreach ($cafeInstanceArray as $key => $value) {
+            $sql = "INSERT INTO [dbo].[HU_Cafe_Helper] ([oldProcessID],[urlLink])
+                    VALUES ('".$processID."', '".$value["link"]."')";
             $this->alert($sql);
             $result = $jobDB->exec($sql);
             if ($result === false) {
                 throw new JobRouterException($jobDB->getErrorMessage());
             }
             else {
-                $this->alert("New line has been inserted into the helper table");
+                $this->alert("New line has been inserted into the helper table for ".$value["birthName"]);
             }
-            
         }
 	}
 }

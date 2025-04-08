@@ -1,15 +1,10 @@
-function OnStatementLoad(){
-    var url = document.location.href;
-    //console.log(url);
-    jr_execute_dialog_function('GetDataFromLink', {"url":url}, onDataFromLinkSuccess);
-}
-
-function onDataFromLinkSuccess(returnData){
+function OnApprovalLoad(){
     var realAvailableAmount=0;
     //All the same or different by jobtitle groups
     if (returnData.result.success["CafeGroupSelector"]==0) {
         jr_set_value('CafeGroup', 'Minden munkavállaló egységes');
         realAvailableAmount=returnData.result.success["AvailableAmount"];
+        
     }
     else
     {
@@ -23,6 +18,7 @@ function onDataFromLinkSuccess(returnData){
     }
     jr_set_value('AvailableAmount', realAvailableAmount);
     jr_set_value('CustomToken', returnData.result.success["customToken"]);
+    jr_set_value('CustomProcessID', returnData.result.success["processID"]);
     jr_set_value('FirstName', returnData.result.success["firstName"]);
     jr_set_value('LastName', returnData.result.success["lastName"]);
     jr_set_value('JobDescription', returnData.result.success["jobTitle"]);
@@ -37,7 +33,7 @@ function onDataFromLinkSuccess(returnData){
     jr_set_value('ValidMonthRule', validMonthRule);
     var probationRule=returnData.result.success["ProbationMonthRule"];
     jr_set_value('ProbationMonthRule', probationRule);
-    if (returnData.result.success["ProbationPeriodEnd"]===null || returnData.result.success["ProbationPeriodEnd"]==="" || probationRule=="na") {
+    if (returnData.result.success["ProbationPeriodEnd"]===null || returnData.result.success["ProbationPeriodEnd"]==="") {
         probationEnd=startDate;
     }
     jr_set_value('ProbationPeriodEnd', probationEnd);
@@ -123,40 +119,29 @@ function onDataFromLinkSuccess(returnData){
     }
     jr_set_value('RealAvailableAmount', realAvailableAmount);
 
-    //if it's the first time
-    console.log("corrections is:");
-    console.log(returnData.result.success["Corrections"]);
-    let corrections=returnData.result.success["Corrections"];
-    if (corrections==0) {
-        var optionArray=[];
-        returnData.result.success["Options"].forEach(element => {
-            let option={};
-            option.CafeName=element["optionDisplayName"];
-            option.Multiplier=element["optionMultiplier"];
-            option.LimitAmount1=element["optionLimitAmount1"];
-            option.LimitAmount2=element["optionLimitAmount2"];
-            option.LimitAmount3=element["optionLimitAmount3"];
-            option.LimitAmount4=element["optionLimitAmount4"];
-            option.LimitPeriod1=element["optionLimitPeriod1"];
-            option.LimitPeriod2=element["optionLimitPeriod2"];
-            option.LimitPeriod3=element["optionLimitPeriod3"];
-            option.LimitPeriod4=element["optionLimitPeriod4"];
-            optionArray.push(option);
-        });
-        //insert remainder row at the end
-        let monthlyRemainderRow={};
-        monthlyRemainderRow.CafeName="Hátralévő felhalmozott maradék (bruttó)";
-        optionArray.push(monthlyRemainderRow);
-        jr_add_subtable_row('HU_CAFE_AMOUNTS_TABLE_VIEW', optionArray, false, rowsAdded);
-    }
-    else
-    {
-        console.log("isTest is:");
-        console.log(returnData.result.success["isTest"]);
-        if (returnData.result.success["isTest"]!=1) {
-            jr_add_subtable_row('HU_CAFE_AMOUNTS_TABLE_VIEW', returnData.result.success["Table"], false, rowsAdded);
-        }
-    }
+
+    var optionArray=[];
+    returnData.result.success["Options"].forEach(element => {
+        let option={};
+        option.CafeName=element["optionDisplayName"];
+        option.Multiplier=element["optionMultiplier"];
+        option.LimitAmount1=element["optionLimitAmount1"];
+        option.LimitAmount2=element["optionLimitAmount2"];
+        option.LimitAmount3=element["optionLimitAmount3"];
+        option.LimitAmount4=element["optionLimitAmount4"];
+        option.LimitPeriod1=element["optionLimitPeriod1"];
+        option.LimitPeriod2=element["optionLimitPeriod2"];
+        option.LimitPeriod3=element["optionLimitPeriod3"];
+        option.LimitPeriod4=element["optionLimitPeriod4"];
+        optionArray.push(option);
+    });
+
+    //insert remainder row at the end
+    let monthlyRemainderRow={};
+    monthlyRemainderRow.CafeName="Hátralévő felhalmozott maradék (bruttó)";
+    optionArray.push(monthlyRemainderRow);
+
+    jr_add_subtable_row('HU_CAFE_AMOUNTS_TABLE_VIEW', optionArray, false, rowsAdded);
     function rowsAdded(addedRowsNum) {
         var columnNameArray=[];
         columnNameArray.push("January");
@@ -176,11 +161,11 @@ function onDataFromLinkSuccess(returnData){
             var cellElement=document.getElementById("HU_CAFE_AMOUNTS_TABLE_VIEW_"+columnName+"_"+(addedRowsNum-1));
             cellElement.setAttribute("readonly",true);
         }
-        InitTable(returnData.result.success["Corrections"]);
+        InitTable(addedRowsNum);
     }
 }
 
-function InitTable(corrections){
+function InitTable(){
     var viewName='HU_CAFE_AMOUNTS_TABLE_VIEW';
     var availableAmount=parseInt(jr_get_value('RealAvailableAmount'));
     var validMonths=parseInt(jr_get_value('ValidMonthsCount'));
@@ -268,9 +253,7 @@ function InitTable(corrections){
     allMonthsArrayForSum.push(['October',availablePerMonth*Math.max(validMonths-2,0),'OctoberGross']);
     allMonthsArrayForSum.push(['November',availablePerMonth*Math.max(validMonths-1,0),'NovemberGross']);
     allMonthsArrayForSum.push(['December',availableAmount,'DecemberGross']);
-    //let corrections=jr_get_value("Corrections");
-    console.log("átadódik a corrections?");
-    console.log(corrections);
+
     //go through the rows
     for (let rowsI = 0; rowsI < rowIDs.length-1; rowsI++) {
         const rowID = rowIDs[rowsI];
@@ -279,10 +262,8 @@ function InitTable(corrections){
             //get the array of the current month
             let currentMonthArray = allMonthsArrayForSum[monthI];
             //display the cumulative remainder for both normal and gross months
-            if (corrections==0) {
-                jr_set_subtable_value(viewName, rowIDs.length-1, currentMonthArray[0],currentMonthArray[1]);
-                jr_set_subtable_value(viewName, rowIDs.length-1, currentMonthArray[2],currentMonthArray[1]);
-            }
+            jr_set_subtable_value(viewName, rowIDs.length-1, currentMonthArray[0],currentMonthArray[1]);
+            jr_set_subtable_value(viewName, rowIDs.length-1, currentMonthArray[2],currentMonthArray[1]);
             //color the gross(readonly) months to differentiate
             document.getElementById("HU_CAFE_AMOUNTS_TABLE_VIEW_"+currentMonthArray[2]+"_"+rowID).style.background="silver";
 
@@ -293,10 +274,8 @@ function InitTable(corrections){
                 cellElement.setAttribute("readonly",true);
             }
         }
-        if (corrections==0) {
-            //display the row's sum as 0
-            jr_set_subtable_value(viewName, rowID, "Sum", 0);
-        }
+        //display the row's sum as 0
+        jr_set_subtable_value(viewName, rowID, "Sum", 0);
 
         //fix the limits display for each row
         document.getElementById("HU_CAFE_AMOUNTS_TABLE_VIEW_LimitPeriod1_"+rowID).style.textAlign="center";
@@ -325,13 +304,9 @@ function InitTable(corrections){
         jr_set_column_label('HU_CAFE_AMOUNTS_TABLE_VIEW', "December", 'Hónap nettó');
         jr_set_column_label('HU_CAFE_AMOUNTS_TABLE_VIEW', "DecemberGross", 'Hónap bruttó');
         //show amount per month in last month, instead of the cumulative sum
-        if (corrections==0) {
-            jr_set_subtable_value(viewName, rowIDs.length-1, "December",availablePerMonth);
-            jr_set_subtable_value(viewName, rowIDs.length-1, "DecemberGross",availablePerMonth);
-        }
+        jr_set_subtable_value(viewName, rowIDs.length-1, "December",availablePerMonth);
+        jr_set_subtable_value(viewName, rowIDs.length-1, "DecemberGross",availablePerMonth);
     }
-    if (corrections==0) {
-        //show the whole remaining available amount at the last column of the last row
-        jr_set_subtable_value(viewName, rowIDs.length-1, "Sum", availableAmount);
-    }
+    //show the whole remaining available amount at the last column of the last row
+    jr_set_subtable_value(viewName, rowIDs.length-1, "Sum", availableAmount);
 }

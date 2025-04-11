@@ -156,6 +156,11 @@ function onDataFromLinkSuccess(returnData){
         if (returnData.result.success["isTest"]!=1) {
             jr_add_subtable_row('HU_CAFE_AMOUNTS_TABLE_VIEW', returnData.result.success["Table"], false, rowsAdded);
         }
+        else
+        {
+            var rowsArr=jr_get_subtable_row_ids('HU_CAFE_AMOUNTS_TABLE_VIEW');
+            rowsAdded(rowsArr.length);
+        }
     }
     function rowsAdded(addedRowsNum) {
         var columnNameArray=[];

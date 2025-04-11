@@ -1,10 +1,9 @@
 Most:
 
-- amikor ismét megkapja javításra, akkor is legyenek formázások a táblán
-- jóváhagyásnál is legyenek formázások a táblán
 - havi egyenlőnél jelenleg csak 1 hónapra írja be, legyen másolva utólag
 
 végén:
+
 - manuális mentés gomb hozzáadása
 - adathackeléskor szóljon a HRreferensnek
 - behúzni, Hr referens=Project Manager,Payrollert mind2-t adatbázisból
@@ -25,6 +24,8 @@ PHP-val egy utána lévő szakaszban (mondjuk lépésben) úrja átszámolni az 
 
 kész:
 
+- jóváhagyásnál is legyenek formázások a táblán
+- amikor ismét megkapja javításra, akkor is legyenek formázások a táblán
 - pingpong javítása
 - "nincs tört havi szabály" felvétele
 - valamiért DW-ből nem akar törölni, beszélni Viktorral

@@ -1,172 +1,6 @@
 function OnApprovalLoad(){
-    var realAvailableAmount=0;
-    //All the same or different by jobtitle groups
-    if (returnData.result.success["CafeGroupSelector"]==0) {
-        jr_set_value('CafeGroup', 'Minden munkavállaló egységes');
-        realAvailableAmount=returnData.result.success["AvailableAmount"];
-        
-    }
-    else
-    {
-        for (let groupsI = 0; groupsI < returnData.result.success["Groups"].length; groupsI++) {
-            const element = returnData.result.success["Groups"][groupsI];
-            if (element["GroupName"]==returnData.result.success["jobTitle"]) {
-                realAvailableAmount=element["Amount"];
-                jr_set_value('CafeGroup', element["GroupName"]);
-            }
-        }
-    }
-    jr_set_value('AvailableAmount', realAvailableAmount);
-    jr_set_value('CustomToken', returnData.result.success["customToken"]);
-    jr_set_value('CustomProcessID', returnData.result.success["processID"]);
-    jr_set_value('FirstName', returnData.result.success["firstName"]);
-    jr_set_value('LastName', returnData.result.success["lastName"]);
-    jr_set_value('JobDescription', returnData.result.success["jobTitle"]);
-    var probationEnd=new Date(Date.parse(returnData.result.success["ProbationPeriodEnd"]));
-    var firstWorkDay=new Date(Date.parse(returnData.result.success["FirstWDayOfTheYear"]));
-    jr_set_value('FirstWDayOfTheYear', firstWorkDay);
-    var deadline=new Date(Date.parse(returnData.result.success["CafeteriaDeadline"]));
-    jr_set_value('CafeteriaDeadline', deadline);
-    var startDate = new Date(Date.parse(returnData.result.success["validFrom"]));
-    jr_set_value('StartOfContract', returnData.result.success["validFrom"]);
-    var validMonthRule=parseInt(returnData.result.success["ValidMonthRule"]);
-    jr_set_value('ValidMonthRule', validMonthRule);
-    var probationRule=returnData.result.success["ProbationMonthRule"];
-    jr_set_value('ProbationMonthRule', probationRule);
-    if (returnData.result.success["ProbationPeriodEnd"]===null || returnData.result.success["ProbationPeriodEnd"]==="") {
-        probationEnd=startDate;
-    }
-    jr_set_value('ProbationPeriodEnd', probationEnd);
-    var statementStartDate=startDate;
-    //We do not care for "After" and "Yes", as they are not relevant
-    //After statements only start after the probation period ended
-    if (probationRule=="No" || probationRule=="After") {
-        statementStartDate=probationEnd;
-    }
-
-    var validMonths=0;
-    var startYear= statementStartDate.getFullYear();
-    var currentYear= firstWorkDay.getFullYear();
-    if (startYear<currentYear) {
-        validMonths=12;
-    }
-    else
-    {
-        var startMonth=statementStartDate.getMonth();
-        var startContractDay=statementStartDate.getDate();
-        if (startContractDay<validMonthRule) { //2 or 16
-            //handle 30/days time based rules/systems
-            //We will cross the bridge when we get to it
-            validMonths=12-startMonth;
-        }
-        else
-        {
-            var firstDayOfYear=firstWorkDay.getDate();
-            if (startMonth==0 && startContractDay<=firstDayOfYear) {
-                validMonths=12;
-            }
-            else
-            {
-                validMonths=11-startMonth;
-            }
-        }
-    }
-    jr_set_value('ValidMonthsCount', validMonths);
-    jr_set_value('TaxNumber', returnData.result.success["taxID"]);
-    jr_set_value('BirthName', returnData.result.success["birthName"]);
-    jr_set_value('TaxingType', returnData.result.success["TaxingTypeSelector"]);
-    jr_set_value('Term', returnData.result.success["TermSelector"]);
-    jr_set_value('EqualMonthRule', returnData.result.success["EqualMonthRule"]);
-    if (returnData.result.success["TermSelector"]=="havi") {
-        realAvailableAmount=realAvailableAmount*12;
-    }
-
-    //If its after probation, we need to recalculate the months from the start of contract to see the validmonths and amount
-    //We still had to disable the probation months in the code above
-    if(probationRule=="After")
-    {
-        validMonths=0;
-        startYear= startDate.getFullYear();
-        currentYear= firstWorkDay.getFullYear();
-        if (startYear<currentYear) {
-            validMonths=12;
-        }
-        else
-        {
-            startMonth=startDate.getMonth();
-            startContractDay=startDate.getDate();
-            if (startContractDay<validMonthRule) { //2 or 16
-                //handle 30/days time based rules/systems
-                //We will cross the bridge when we get to it
-                validMonths=12-startMonth;
-            }
-            else
-            {
-                firstDayOfYear=firstWorkDay.getDate();
-                if (startMonth==0 && startContractDay<=firstDayOfYear) {
-                    validMonths=12;
-                }
-                else
-                {
-                    validMonths=11-startMonth;
-                }
-            }
-        }
-    }
-    realAvailableAmount=Math.floor((realAvailableAmount*validMonths)/12);
-    if (returnData.result.success["TaxingTypeSelector"]=="szuperbruttó") {
-        realAvailableAmount=Math.floor(realAvailableAmount/1.13);
-    }
-    jr_set_value('RealAvailableAmount', realAvailableAmount);
-
-
-    var optionArray=[];
-    returnData.result.success["Options"].forEach(element => {
-        let option={};
-        option.CafeName=element["optionDisplayName"];
-        option.Multiplier=element["optionMultiplier"];
-        option.LimitAmount1=element["optionLimitAmount1"];
-        option.LimitAmount2=element["optionLimitAmount2"];
-        option.LimitAmount3=element["optionLimitAmount3"];
-        option.LimitAmount4=element["optionLimitAmount4"];
-        option.LimitPeriod1=element["optionLimitPeriod1"];
-        option.LimitPeriod2=element["optionLimitPeriod2"];
-        option.LimitPeriod3=element["optionLimitPeriod3"];
-        option.LimitPeriod4=element["optionLimitPeriod4"];
-        optionArray.push(option);
-    });
-
-    //insert remainder row at the end
-    let monthlyRemainderRow={};
-    monthlyRemainderRow.CafeName="Hátralévő felhalmozott maradék (bruttó)";
-    optionArray.push(monthlyRemainderRow);
-
-    jr_add_subtable_row('HU_CAFE_AMOUNTS_TABLE_VIEW', optionArray, false, rowsAdded);
-    function rowsAdded(addedRowsNum) {
-        var columnNameArray=[];
-        columnNameArray.push("January");
-        columnNameArray.push("February");
-        columnNameArray.push("March");
-        columnNameArray.push("April");
-        columnNameArray.push("May");
-        columnNameArray.push("June");
-        columnNameArray.push("July");
-        columnNameArray.push("August");
-        columnNameArray.push("September");
-        columnNameArray.push("October");
-        columnNameArray.push("November");
-        columnNameArray.push("December");
-        for (let columnI = 0; columnI < columnNameArray.length; columnI++) {
-            const columnName = columnNameArray[columnI];
-            var cellElement=document.getElementById("HU_CAFE_AMOUNTS_TABLE_VIEW_"+columnName+"_"+(addedRowsNum-1));
-            cellElement.setAttribute("readonly",true);
-        }
-        InitTable(addedRowsNum);
-    }
-}
-
-function InitTable(){
     var viewName='HU_CAFE_AMOUNTS_TABLE_VIEW';
+    //need to do security before this
     var availableAmount=parseInt(jr_get_value('RealAvailableAmount'));
     var validMonths=parseInt(jr_get_value('ValidMonthsCount'));
     var showLimit2=false;
@@ -174,7 +8,7 @@ function InitTable(){
     var showLimit4=false;
     var availablePerMonth=Math.floor(availableAmount/validMonths);
 
-//----------------------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
     //Go through the rows and check if there are any cafe options with multiple limits
     var rowIDs=jr_get_subtable_row_ids(viewName);
     for (let rowsI = 0; rowsI < rowIDs.length-1; rowsI++) {
@@ -235,7 +69,7 @@ function InitTable(){
         document.getElementById("div_HU_CAFE_AMOUNTS_TABLE_VIEW_LimitPeriod4_header").style.width="50px";
     }
 
-//--------------------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------
     //Format the table display, color the invalid months and show 0 sums and remaining values
     //get equal month rule value
     var selectAmountRule=jr_get_value('EqualMonthRule');
@@ -253,7 +87,6 @@ function InitTable(){
     allMonthsArrayForSum.push(['October',availablePerMonth*Math.max(validMonths-2,0),'OctoberGross']);
     allMonthsArrayForSum.push(['November',availablePerMonth*Math.max(validMonths-1,0),'NovemberGross']);
     allMonthsArrayForSum.push(['December',availableAmount,'DecemberGross']);
-
     //go through the rows
     for (let rowsI = 0; rowsI < rowIDs.length-1; rowsI++) {
         const rowID = rowIDs[rowsI];
@@ -261,11 +94,14 @@ function InitTable(){
         for (let monthI = 0; monthI < allMonthsArrayForSum.length; monthI++) {
             //get the array of the current month
             let currentMonthArray = allMonthsArrayForSum[monthI];
-            //display the cumulative remainder for both normal and gross months
-            jr_set_subtable_value(viewName, rowIDs.length-1, currentMonthArray[0],currentMonthArray[1]);
-            jr_set_subtable_value(viewName, rowIDs.length-1, currentMonthArray[2],currentMonthArray[1]);
             //color the gross(readonly) months to differentiate
             document.getElementById("HU_CAFE_AMOUNTS_TABLE_VIEW_"+currentMonthArray[2]+"_"+rowID).style.background="silver";
+            //set the normal month columns to be read only too, for the approval
+            const columnName = currentMonthArray[0];
+            var cellElement2=document.getElementById("HU_CAFE_AMOUNTS_TABLE_VIEW_"+columnName+"_"+rowsI);
+            cellElement2.setAttribute("readonly",true);
+            var cellElement3=document.getElementById("HU_CAFE_AMOUNTS_TABLE_VIEW_"+columnName+"_"+(rowIDs.length-1));
+            cellElement3.setAttribute("readonly",true);
 
             //check the equal month rule and color and set read only for invalid months
             if (selectAmountRule=="egyenlőtlen juttatás összeg választható időarányosan" && monthI<(12-validMonths)) {
@@ -274,8 +110,6 @@ function InitTable(){
                 cellElement.setAttribute("readonly",true);
             }
         }
-        //display the row's sum as 0
-        jr_set_subtable_value(viewName, rowID, "Sum", 0);
 
         //fix the limits display for each row
         document.getElementById("HU_CAFE_AMOUNTS_TABLE_VIEW_LimitPeriod1_"+rowID).style.textAlign="center";
@@ -289,8 +123,8 @@ function InitTable(){
             document.getElementById("HU_CAFE_AMOUNTS_TABLE_VIEW_LimitPeriod4_"+rowID).style.textAlign="center";
         }
     }
- 
-//---------------------------------------------------------------------------------------------------------------------------------
+
+    //---------------------------------------------------------------------------------------------------------------------------------
     //check rule and show only 1 months if needed
     if (selectAmountRule=="havi egyenlő juttatás összeg választható") {
         //go through the months and hide all except the last
@@ -304,9 +138,5 @@ function InitTable(){
         jr_set_column_label('HU_CAFE_AMOUNTS_TABLE_VIEW', "December", 'Hónap nettó');
         jr_set_column_label('HU_CAFE_AMOUNTS_TABLE_VIEW', "DecemberGross", 'Hónap bruttó');
         //show amount per month in last month, instead of the cumulative sum
-        jr_set_subtable_value(viewName, rowIDs.length-1, "December",availablePerMonth);
-        jr_set_subtable_value(viewName, rowIDs.length-1, "DecemberGross",availablePerMonth);
     }
-    //show the whole remaining available amount at the last column of the last row
-    jr_set_subtable_value(viewName, rowIDs.length-1, "Sum", availableAmount);
 }

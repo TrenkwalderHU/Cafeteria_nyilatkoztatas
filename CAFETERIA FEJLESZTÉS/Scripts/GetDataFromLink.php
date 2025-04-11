@@ -71,10 +71,9 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
             $returnArray["firstName"]="Teszt";
             $returnArray["lastName"]="Elek";
             $returnArray["validFrom"]=$this->getTableValue("ValidFromDate");
-            $returnArray["birthName"]="Tesztelek";
+            $returnArray["birthName"]="Teszt Elek";
             $returnArray["email"]="teszt@test.com";
             $returnArray["ProbationPeriodEnd"]=$this->getTableValue("TestProbationPerEnd");
-
             $returnArray["CafeGroupSelector"]=0;
             $returnArray["TermSelector"]=$this->getTableValue("TermSelector");
             $returnArray["TaxingTypeSelector"]=$this->getTableValue("TaxingTypeSelector");

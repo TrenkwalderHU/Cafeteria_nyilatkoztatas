@@ -2,28 +2,36 @@ Most:
 
 - havi egyenlőnél jelenleg csak 1 hónapra írja be, legyen másolva utólag
 
+
+
 végén:
 
-- manuális mentés gomb hozzáadása
-- adathackeléskor szóljon a HRreferensnek
-- behúzni, Hr referens=Project Manager,Payrollert mind2-t adatbázisból
 - Dolgozó lista táblában alul névre keresés, vagy adóazonosítóra keresés, belépés dátuma tól-ig kereshető legyen
 	-összes találat számát kijelezni
 	-lapozást implementálni
-- opciók manage datába, ne kelljen újra és újra kitölteni
-	 helyette inkább opció indításnál, hogy beállítások betöltése
+- Nexon Import elkészítése
+
+
+
+
+hackelés ellen (low prio):
+
+- adathackeléskor szóljon a HRreferensnek
 - leellenőrizni, hogy az availableamountnál ha manuálisan átírom, akkor el tudom-e küldeni, a rendszert átverve, és ha igen, akkor gátat tenni ehhez a kódba
 	-save cell value ugyanez (hiddensaveCellValue element segítségével)
 	-Személyes adatok ugyanez, elrejtett 2. oldal ugyanez, más nevével lehetne nyilatkozni, stb
 	-available amount a valid hónapoktól függően változik elrejtve, a js-ben, ezt is utánaellenőrizni
-PHP-val egy utána lévő szakaszban (mondjuk lépésben) úrja átszámolni az egész café nyilatkozatot, hogy tényleg valid-e.
-- Nexon Import elkészítése
-- Portál dokumentum törlése
-- letesztelni ha a megjelenítésben 0 tizedes jegy van, lehet-e a háttérben mégis több?
+- PHP-val egy utána lévő szakaszban (mondjuk lépésben) úrja átszámolni az egész café nyilatkozatot, hogy tényleg valid-e.
+
+
 
 
 kész:
 
+- opciók manage datába, ne kelljen újra és újra kitölteni
+	 helyette inkább opció indításnál, hogy beállítások betöltése
+- jóváhagyást aki az első lépést indította, annak a nevére tenni
+- Portál dokumentum törlése
 - jóváhagyásnál is legyenek formázások a táblán
 - amikor ismét megkapja javításra, akkor is legyenek formázások a táblán
 - pingpong javítása
@@ -67,3 +75,10 @@ kész:
 - text-align: center a hónapokra, word-wrap a további időszak(hónapra)
 - Excelhez hasonló, vagy egyéb színezések darkgrey a bruttókra
 - méretek a limit/időszakra? szorzóra, szeptemberre, stb
+
+
+most mégsem:
+
+- behúzni, Hr referens=Project Manager,Payrollert mind2-t adatbázisból
+- manuális mentés gomb hozzáadása
+- letesztelni ha a megjelenítésben 0 tizedes jegy van, lehet-e a háttérben mégis több?

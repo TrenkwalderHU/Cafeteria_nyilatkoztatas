@@ -7,6 +7,7 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\RuleExecutionFuncti
         $newProcessID=$this->getProcessId();
         //get URL from helper table
         $url="";
+        $oldprocessID="";
         $jobDB = $this->getJobDB();
         $sql = "SELECT * FROM HU_Cafe_Helper
                 where newProcessID='".$newProcessID."'";
@@ -18,6 +19,7 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\RuleExecutionFuncti
         while ($row = $jobDB->fetchRow($result)) {
             $this->dump($row);
             $url=$row["urlLink"];
+            $oldprocessID=$row["oldProcessID"];
         }
 
         //get employee data from DB
@@ -50,6 +52,22 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\RuleExecutionFuncti
             {
                 $this->alert("Inserted the employee's data into the subtable");
             }
+        }
+
+        //get the process starter's username
+        $sql = "SELECT * FROM HU_CAFETERIA_NYILATK
+                where step_id=( 
+                    Select MAX(cdata.step_id) 
+                    from HU_CAFETERIA_NYILATK as cdata 
+                    where cdata.processid ='".$oldprocessID."')";
+        $this->alert($sql);
+        $result = $jobDB->query($sql);
+        if ($result === false) {
+            throw new JobRouterException($jobDB->getErrorMessage());
+        }
+        while ($row = $jobDB->fetchRow($result)) {
+            $this->dump($row);
+            $this->setTableValue("ProcessStarter", $row["ProcessStarter"]);
         }
 	}
 }

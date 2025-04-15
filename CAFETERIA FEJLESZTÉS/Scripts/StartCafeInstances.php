@@ -4,6 +4,8 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\RuleExecutionFuncti
 {
 	public function execute($rowId = null)
 	{
+	    $initiator=$this->getInitiator();
+	    $this->setTableValue("ProcessStarter", $initiator);
 	    $subtable="HU_CAFE_EMPLOYEEDATA";
 	    $rowIDs=$this->getSubtableRowIds($subtable);
 	    for($i = count($rowIDs) - 1; $i >= 0; $i--)

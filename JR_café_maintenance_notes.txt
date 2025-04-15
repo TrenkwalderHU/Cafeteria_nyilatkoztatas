@@ -6,3 +6,4 @@
 5, OnSettingsSubmit scriptbe
 	b, a kódban lejjebb, a canSendStepnél is felvenni +1 sort
 6, OnSettingsLoad scriptbe
+7, loadprevioussettings scriptbe

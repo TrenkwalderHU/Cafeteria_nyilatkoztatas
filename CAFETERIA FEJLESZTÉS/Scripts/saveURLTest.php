@@ -16,7 +16,7 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\RuleExecutionFuncti
             throw new JobRouterException($jobDB->getErrorMessage());
         }
         else {
-            $this->alert("New line has been inserted into the helper table for the test);
+            $this->alert("New line has been inserted into the helper table for the test");
         }
 	}
 }

@@ -166,6 +166,19 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
                 $returnArray["EqualMonthRule"]=$row['EqualMonthRule'];
                 $returnArray["ProbationMonthRule"]=$row['ProbationMonthRule'];
                 $returnArray["ValidMonthRule"]=$row['ValidMonthRule'];
+                $returnArray["HousingContractShown"]=$row['HousingContractShown'];
+                $returnArray["StudentLoanContractS"]=$row['StudentLoanContractS'];
+                $returnArray["SZEPACCNUM1"]=$row['SZEPACCNUM1'];
+                $returnArray["SZEPACCNUM2"]=$row['SZEPACCNUM2'];
+                $returnArray["SZEPACCNUM3"]=$row['SZEPACCNUM3'];
+                $returnArray["SZEPActiveAccNum1"]=$row['SZEPActiveAccNum1'];
+                $returnArray["SZEPActiveAccNum2"]=$row['SZEPActiveAccNum2'];
+                $returnArray["SZEPActiveAccNum3"]=$row['SZEPActiveAccNum3'];
+                $returnArray["BankAccContractShown"]=$row['BankAccContractShown'];
+                $returnArray["BankAccContractID"]=$row['BankAccContractID'];
+                $returnArray["BankAccContractID2"]=$row['BankAccContractID2'];
+                $returnArray["BankAccContractName"]=$row['BankAccContractName'];
+                $returnArray["BankAccContractName2"]=$row['BankAccContractName2'];
                 $returnArray["Corrections"]=$corrections;
             }
             //if we need to get the cafe title groups and amounts

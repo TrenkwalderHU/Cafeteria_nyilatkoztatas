@@ -2,6 +2,21 @@ function OnStatementLoad(){
     var url = document.location.href;
     //console.log(url);
     jr_execute_dialog_function('GetDataFromLink', {"url":url}, onDataFromLinkSuccess);
+
+    jr_hide("HousingContractShown");
+    jr_hide("StudentLoanContractS");
+    jr_hide("BankAccContractShown");
+    jr_hide("BankAccContractName");
+    jr_hide("BankAccContractID");
+    jr_hide("BankAccContractName2");
+    jr_hide("BankAccContractID2");
+    jr_hide("SZEPACCNUM1");
+    jr_hide("SZEPACCNUM2");
+    jr_hide("SZEPACCNUM3");
+    jr_hide("SZEPActiveAccNum1");
+    jr_hide("SZEPActiveAccNum2");
+    jr_hide("SZEPActiveAccNum3");
+    jr_hide("HU_CAFE_PREVIOUS_EMP_VIEW");
 }
 
 function onDataFromLinkSuccess(returnData){
@@ -124,11 +139,10 @@ function onDataFromLinkSuccess(returnData){
     jr_set_value('RealAvailableAmount', realAvailableAmount);
 
     //if it's the first time
-    console.log("corrections is:");
-    console.log(returnData.result.success["Corrections"]);
     let corrections=returnData.result.success["Corrections"];
     if (corrections==0) {
         var optionArray=[];
+        var previousEmployerOptionArray=[];
         returnData.result.success["Options"].forEach(element => {
             let option={};
             option.CafeName=element["optionDisplayName"];
@@ -142,17 +156,45 @@ function onDataFromLinkSuccess(returnData){
             option.LimitPeriod3=element["optionLimitPeriod3"];
             option.LimitPeriod4=element["optionLimitPeriod4"];
             optionArray.push(option);
+            let previousEmployerOption={};
+            previousEmployerOption.OptionName=element["optionDisplayName"];
+            previousEmployerOptionArray.push(previousEmployerOption);
+            if (element["optionName"]=="HousingSupport") {
+                jr_show("HousingContractShown");
+            }
+            else if(element["optionName"]=="StudentLoanSupport"){
+                jr_show("StudentLoanContractS");
+            }
+            else if(element["optionName"]=="CheckoutPayments"){
+                jr_show("BankAccContractShown");
+                jr_show("BankAccContractName");
+                jr_show("BankAccContractID");
+            }
+            else if(element["optionName"]=="VolunteerMemberFee"){
+                jr_show("BankAccContractShown");
+                jr_show("BankAccContractName2");
+                jr_show("BankAccContractID2");
+            }
+            else if(element["optionName"]=="SZEPUnderLimit"){
+                jr_show("SZEPACCNUM1");
+                jr_show("SZEPACCNUM2");
+                jr_show("SZEPACCNUM3");
+            }
+            else if(element["optionName"]=="SZEPActive"){
+                jr_show("SZEPActiveAccNum1");
+                jr_show("SZEPActiveAccNum2");
+                jr_show("SZEPActiveAccNum3");
+            }
         });
         //insert remainder row at the end
         let monthlyRemainderRow={};
         monthlyRemainderRow.CafeName="Hátralévő felhalmozott maradék (bruttó)";
         optionArray.push(monthlyRemainderRow);
         jr_add_subtable_row('HU_CAFE_AMOUNTS_TABLE_VIEW', optionArray, false, rowsAdded);
+        jr_add_subtable_row('HU_CAFE_PREVIOUS_EMP_VIEW', previousEmployerOptionArray, false, previousEmployerRowsAdded);
     }
     else
     {
-        console.log("isTest is:");
-        console.log(returnData.result.success["isTest"]);
         if (returnData.result.success["isTest"]!=1) {
             jr_add_subtable_row('HU_CAFE_AMOUNTS_TABLE_VIEW', returnData.result.success["Table"], false, rowsAdded);
         }
@@ -162,6 +204,11 @@ function onDataFromLinkSuccess(returnData){
             rowsAdded(rowsArr.length);
         }
     }
+
+    function previousEmployerRowsAdded(addedRowsNum) {
+        //not used yet
+    }
+
     function rowsAdded(addedRowsNum) {
         var columnNameArray=[];
         columnNameArray.push("January");
@@ -273,9 +320,6 @@ function InitTable(corrections){
     allMonthsArrayForSum.push(['October',availablePerMonth*Math.max(validMonths-2,0),'OctoberGross']);
     allMonthsArrayForSum.push(['November',availablePerMonth*Math.max(validMonths-1,0),'NovemberGross']);
     allMonthsArrayForSum.push(['December',availableAmount,'DecemberGross']);
-    //let corrections=jr_get_value("Corrections");
-    console.log("átadódik a corrections?");
-    console.log(corrections);
     //go through the rows
     for (let rowsI = 0; rowsI < rowIDs.length-1; rowsI++) {
         const rowID = rowIDs[rowsI];

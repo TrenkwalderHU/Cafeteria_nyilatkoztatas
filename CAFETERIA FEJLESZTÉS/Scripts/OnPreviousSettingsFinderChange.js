@@ -18,7 +18,7 @@ function onLoadSettingsSuccess(returnData){
     jr_set_value('TermSelector', returnData.result.success["TermSelector"]);
     jr_set_value('CafeGroupSelector', returnData.result.success["CafeGroupSelector"]);
     if (returnData.result.success["Groups"].length>0) {
-        jr_show("CafeGroupSubTable");
+        jr_show("HU_CAFE_GROUPS_VIEW");
         jr_hide("AvailableAmount");
         let rowsArray=[];
         for (let groupsI = 0; groupsI < returnData.result.success["Groups"].length; groupsI++) {
@@ -39,7 +39,6 @@ function onLoadSettingsSuccess(returnData){
     jr_set_value('UnjustifiedAbsenceMonthRule', returnData.result.success["UnjustifiedAbsence"]);
     jr_set_value('NumberOfUnjustifiedAbsenceDays', returnData.result.success["NumberOfUnjustifiedA"]);
     var deadline=new Date(Date.parse(returnData.result.success["CafeteriaDeadline"]));
-    console.log(returnData.result.success["CafeteriaDeadline"]);
     jr_set_value('CafeteriaDeadline', deadline);
 
     jr_set_value('CommuteRefund', returnData.result.success["CommuteRefund"]);
@@ -67,5 +66,6 @@ function onLoadSettingsSuccess(returnData){
 
 function rowsAdded(){
     //jr_subtable_refresh();
+    //jr_sql_refresh(['Department', 'Branch', 'HRReferee', 'Payroller']);
     console.log("rows have been added");
 }

@@ -4,6 +4,9 @@ Most:
 
 
 
+
+
+
 végén:
 
 - Dolgozó lista táblában alul névre keresés, vagy adóazonosítóra keresés, belépés dátuma tól-ig kereshető legyen
@@ -24,12 +27,27 @@ hackelés ellen (low prio):
 - PHP-val egy utána lévő szakaszban (mondjuk lépésben) úrja átszámolni az egész café nyilatkozatot, hogy tényleg valid-e.
 
 
+részben kész:
+
+- opciók manage datába, ne kelljen újra és újra kitölteni
+	 helyette inkább opció indításnál, hogy beállítások betöltése (részben kész, nem manage datából dolgozik)
+-	a nyilatkozat alá kell egy mezősor – mezőszekció neve „előző munkáltatótól kapott juttatások”, kötelező legyen bepipálni – ahová a kiválasztott juttatások szerinti mezőszám jelenik meg és mindegyikbe be kell kötelezően írni (évközi belépők esetében kiemelten fontos ez), hogy mennyit kapott az előző munkáltatótól. Az érték lehet = NULLA; így nem gond, ha kötelezővé tesszük, mert ha nem kapott, azt így is tudja jelölni - részben kész, form küldése után a security check nézi majd utólag az éves limitet is
 
 
 kész:
 
-- opciók manage datába, ne kelljen újra és újra kitölteni
-	 helyette inkább opció indításnál, hogy beállítások betöltése
+-	amikor valaki juttatásként lakástámogatás elemet választ, akkor kell a táblázat alá egy checkbox, kötelező kitöltéssel: „vonatkozó lakáshitelszerződésemet / bérleti szerződésemet munkáltatómnak bemutattam” ; valamint a jóváhagyó lépésbe is kell egy checkbox kötelező kitöltéssel: „vonatkozó lakáshitelszerződést / bérleti szerződést munkavállaló bemutatta”
+
+-	amikor valaki juttatásként diákhitel elemet választ, akkor kell a táblázat alá egy checkbox, kötelező kitöltéssel: „vonatkozó diákhitel szerződésemet munkáltatómnak bemutattam” ; valamint a jóváhagyó lépésbe is kell egy checkbox kötelező kitöltéssel: „vonatkozó diákhitel szerződést munkavállaló bemutatta”
+
+-	amikor valaki pénztári juttatás elemet választ (egészség, nyugdíj pénztárak) , akkor kell a táblázat alá egy checkbox, kötelező kitöltéssel: „vonatkozó pénztári tagsági szerződésemet munkáltatómnak bemutattam”  + kell egy numerikus mező, ahova szintén kötelező a kitöltés „tagi azonosítóm: „ ; valamint a jóváhagyó lépésbe is kell egy checkbox kötelező kitöltéssel: „vonatkozó pénztári szerződést munkavállaló bemutatta és tagi azonosítóját átadta” 
+
+-	amikor valaki SZÉP juttatás elemet választ, akkor kell a táblázat alá egy 3*8 szám karakter befogadására képes mezősor, ahová kötelező kitölteni a SZÉP számlaszámot
+
+-	amikor valaki Aktív magyarok juttatás elemet választ, akkor kell a táblázat alá egy 3*8 szám karakter befogadására képes mezősor, ahová kötelező kitölteni az Aktív magyarok számlaszámot
+
+
+
 - jóváhagyást aki az első lépést indította, annak a nevére tenni
 - Portál dokumentum törlése
 - jóváhagyásnál is legyenek formázások a táblán

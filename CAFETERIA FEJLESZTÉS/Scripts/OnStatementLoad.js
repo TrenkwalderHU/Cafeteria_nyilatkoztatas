@@ -17,6 +17,12 @@ function OnStatementLoad(){
     jr_hide("SZEPActiveAccNum2");
     jr_hide("SZEPActiveAccNum3");
     jr_hide("HU_CAFE_PREVIOUS_EMP_VIEW");
+    jr_hide("SZEPACCTEXT");
+    jr_hide("SZEPACTIVETEXT");
+    jr_hide("SZEPSplitter");
+    jr_hide("SZEPActiveSplitter");
+    jr_hide("SZEPSplitter2");
+    jr_hide("SZEPActiveSplitter2");
 }
 
 function onDataFromLinkSuccess(returnData){
@@ -96,6 +102,56 @@ function onDataFromLinkSuccess(returnData){
     jr_set_value('TaxingType', returnData.result.success["TaxingTypeSelector"]);
     jr_set_value('Term', returnData.result.success["TermSelector"]);
     jr_set_value('EqualMonthRule', returnData.result.success["EqualMonthRule"]);
+    returnData.result.success["Options"].forEach(element => {
+        if (element["optionName"]=="HousingSupport") {
+            jr_show("HousingContractShown");
+        }
+        else if(element["optionName"]=="StudentLoanSupport"){
+            jr_show("StudentLoanContractS");
+        }
+        else if(element["optionName"]=="CheckoutPayments"){
+            jr_show("BankAccContractShown");
+            jr_show("BankAccContractName");
+            jr_show("BankAccContractID");
+        }
+        else if(element["optionName"]=="VolunteerMemberFee"){
+            jr_show("BankAccContractShown");
+            jr_show("BankAccContractName2");
+            jr_show("BankAccContractID2");
+        }
+        else if(element["optionName"]=="SZEPUnderLimit"){
+            jr_show("SZEPACCNUM1");
+            jr_show("SZEPACCNUM2");
+            jr_show("SZEPACCNUM3");
+
+            jr_show("SZEPACCTEXT");
+            jr_show("SZEPSplitter");
+            jr_show("SZEPSplitter2");
+        }
+        else if(element["optionName"]=="SZEPActive"){
+            jr_show("SZEPActiveAccNum1");
+            jr_show("SZEPActiveAccNum2");
+            jr_show("SZEPActiveAccNum3");
+
+            jr_show("SZEPACTIVETEXT");
+            jr_show("SZEPActiveSplitter");
+            jr_show("SZEPActiveSplitter2");
+        }
+    });
+
+    jr_set_value('HousingContractShown', returnData.result.success["HousingContractShown"]);
+    jr_set_value('StudentLoanContractS', returnData.result.success["StudentLoanContractS"]);
+    jr_set_value('SZEPACCNUM1', returnData.result.success["SZEPACCNUM1"]);
+    jr_set_value('SZEPACCNUM2', returnData.result.success["SZEPACCNUM2"]);
+    jr_set_value('SZEPACCNUM3', returnData.result.success["SZEPACCNUM3"]);
+    jr_set_value('SZEPActiveAccNum1', returnData.result.success["SZEPActiveAccNum1"]);
+    jr_set_value('SZEPActiveAccNum2', returnData.result.success["SZEPActiveAccNum2"]);
+    jr_set_value('SZEPActiveAccNum3', returnData.result.success["SZEPActiveAccNum3"]);
+    jr_set_value('BankAccContractShown', returnData.result.success["BankAccContractShown"]);
+    jr_set_value('BankAccContractID', returnData.result.success["BankAccContractID"]);
+    jr_set_value('BankAccContractID2', returnData.result.success["BankAccContractID2"]);
+    jr_set_value('BankAccContractName', returnData.result.success["BankAccContractName"]);
+    jr_set_value('BankAccContractName2', returnData.result.success["BankAccContractName2"]);
     if (returnData.result.success["TermSelector"]=="havi") {
         realAvailableAmount=realAvailableAmount*12;
     }
@@ -156,34 +212,10 @@ function onDataFromLinkSuccess(returnData){
             option.LimitPeriod3=element["optionLimitPeriod3"];
             option.LimitPeriod4=element["optionLimitPeriod4"];
             optionArray.push(option);
-            let previousEmployerOption={};
-            previousEmployerOption.OptionName=element["optionDisplayName"];
-            previousEmployerOptionArray.push(previousEmployerOption);
-            if (element["optionName"]=="HousingSupport") {
-                jr_show("HousingContractShown");
-            }
-            else if(element["optionName"]=="StudentLoanSupport"){
-                jr_show("StudentLoanContractS");
-            }
-            else if(element["optionName"]=="CheckoutPayments"){
-                jr_show("BankAccContractShown");
-                jr_show("BankAccContractName");
-                jr_show("BankAccContractID");
-            }
-            else if(element["optionName"]=="VolunteerMemberFee"){
-                jr_show("BankAccContractShown");
-                jr_show("BankAccContractName2");
-                jr_show("BankAccContractID2");
-            }
-            else if(element["optionName"]=="SZEPUnderLimit"){
-                jr_show("SZEPACCNUM1");
-                jr_show("SZEPACCNUM2");
-                jr_show("SZEPACCNUM3");
-            }
-            else if(element["optionName"]=="SZEPActive"){
-                jr_show("SZEPActiveAccNum1");
-                jr_show("SZEPActiveAccNum2");
-                jr_show("SZEPActiveAccNum3");
+            if (element["optionLimitAmount1"]>0) {
+                let previousEmployerOption={};
+                previousEmployerOption.OptionName=element["optionDisplayName"];
+                previousEmployerOptionArray.push(previousEmployerOption);
             }
         });
         //insert remainder row at the end
@@ -197,6 +229,7 @@ function onDataFromLinkSuccess(returnData){
     {
         if (returnData.result.success["isTest"]!=1) {
             jr_add_subtable_row('HU_CAFE_AMOUNTS_TABLE_VIEW', returnData.result.success["Table"], false, rowsAdded);
+            jr_add_subtable_row('HU_CAFE_PREVIOUS_EMP_VIEW', returnData.result.success["PreviousTable"], false, previousEmployerRowsAdded);
         }
         else
         {

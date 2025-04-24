@@ -1,10 +1,8 @@
 Most:
 
 - havi egyenlőnél jelenleg csak 1 hónapra írja be, legyen másolva utólag
-
-
-
-
+- évközi belépőnél éves limit figyelése a security check lépésben
+- jóváhagyásnál is csak azok a pipák jelenjenek meg amikre van juttatás
 
 
 végén:
@@ -13,6 +11,7 @@ végén:
 	-összes találat számát kijelezni
 	-lapozást implementálni
 - Nexon Import elkészítése
+- talán a beállításokat manage datába (Ági nem biztos, hogy kéri)
 
 
 
@@ -29,25 +28,24 @@ hackelés ellen (low prio):
 
 részben kész:
 
-- opciók manage datába, ne kelljen újra és újra kitölteni
-	 helyette inkább opció indításnál, hogy beállítások betöltése (részben kész, nem manage datából dolgozik)
--	a nyilatkozat alá kell egy mezősor – mezőszekció neve „előző munkáltatótól kapott juttatások”, kötelező legyen bepipálni – ahová a kiválasztott juttatások szerinti mezőszám jelenik meg és mindegyikbe be kell kötelezően írni (évközi belépők esetében kiemelten fontos ez), hogy mennyit kapott az előző munkáltatótól. Az érték lehet = NULLA; így nem gond, ha kötelezővé tesszük, mert ha nem kapott, azt így is tudja jelölni - részben kész, form küldése után a security check nézi majd utólag az éves limitet is
+- a nyilatkozat alá kell egy mezősor – mezőszekció neve „előző munkáltatótól kapott juttatások”, kötelező legyen bepipálni – ahová a kiválasztott juttatások szerinti mezőszám jelenik meg és mindegyikbe be kell kötelezően írni (évközi belépők esetében kiemelten fontos ez), hogy mennyit kapott az előző munkáltatótól. Az érték lehet = NULLA; így nem gond, ha kötelezővé tesszük, mert ha nem kapott, azt így is tudja jelölni - részben kész, form küldése után a security check nézi majd utólag az éves limitet is
+
+- digitális beléptetésnél van számlaszám mező, nézzem meg, hogy ott hogyan néz ki (Áginak átküldve az én megoldásom, jó ez így?)
 
 
 kész:
 
--	amikor valaki juttatásként lakástámogatás elemet választ, akkor kell a táblázat alá egy checkbox, kötelező kitöltéssel: „vonatkozó lakáshitelszerződésemet / bérleti szerződésemet munkáltatómnak bemutattam” ; valamint a jóváhagyó lépésbe is kell egy checkbox kötelező kitöltéssel: „vonatkozó lakáshitelszerződést / bérleti szerződést munkavállaló bemutatta”
-
--	amikor valaki juttatásként diákhitel elemet választ, akkor kell a táblázat alá egy checkbox, kötelező kitöltéssel: „vonatkozó diákhitel szerződésemet munkáltatómnak bemutattam” ; valamint a jóváhagyó lépésbe is kell egy checkbox kötelező kitöltéssel: „vonatkozó diákhitel szerződést munkavállaló bemutatta”
-
--	amikor valaki pénztári juttatás elemet választ (egészség, nyugdíj pénztárak) , akkor kell a táblázat alá egy checkbox, kötelező kitöltéssel: „vonatkozó pénztári tagsági szerződésemet munkáltatómnak bemutattam”  + kell egy numerikus mező, ahova szintén kötelező a kitöltés „tagi azonosítóm: „ ; valamint a jóváhagyó lépésbe is kell egy checkbox kötelező kitöltéssel: „vonatkozó pénztári szerződést munkavállaló bemutatta és tagi azonosítóját átadta” 
-
--	amikor valaki SZÉP juttatás elemet választ, akkor kell a táblázat alá egy 3*8 szám karakter befogadására képes mezősor, ahová kötelező kitölteni a SZÉP számlaszámot
-
--	amikor valaki Aktív magyarok juttatás elemet választ, akkor kell a táblázat alá egy 3*8 szám karakter befogadására képes mezősor, ahová kötelező kitölteni az Aktív magyarok számlaszámot
-
-
-
+- minden process table value-t felvenni onstatementloadba és a phpba
+- felhasználható összeg formátum
+- esetleg csak azoknál kérjen előző munkáltatói adatot, ahol amugy is van éves keret
+- dolgozók kiválasztása nem kerül be előzőből betöltve
+- előzőből visszatöltés SQL fixálása
+- 2. pénztár mező is legyen kötelező
+- amikor valaki juttatásként lakástámogatás elemet választ, akkor kell a táblázat alá egy checkbox, kötelező kitöltéssel: „vonatkozó lakáshitelszerződésemet / bérleti szerződésemet munkáltatómnak bemutattam” ; valamint a jóváhagyó lépésbe is kell egy checkbox kötelező kitöltéssel: „vonatkozó lakáshitelszerződést / bérleti szerződést munkavállaló bemutatta”
+- amikor valaki juttatásként diákhitel elemet választ, akkor kell a táblázat alá egy checkbox, kötelező kitöltéssel: „vonatkozó diákhitel szerződésemet munkáltatómnak bemutattam” ; valamint a jóváhagyó lépésbe is kell egy checkbox kötelező kitöltéssel: „vonatkozó diákhitel szerződést munkavállaló bemutatta”
+- amikor valaki pénztári juttatás elemet választ (egészség, nyugdíj pénztárak) , akkor kell a táblázat alá egy checkbox, kötelező kitöltéssel: „vonatkozó pénztári tagsági szerződésemet munkáltatómnak bemutattam”  + kell egy numerikus mező, ahova szintén kötelező a kitöltés „tagi azonosítóm: „ ; valamint a jóváhagyó lépésbe is kell egy checkbox kötelező kitöltéssel: „vonatkozó pénztári szerződést munkavállaló bemutatta és tagi azonosítóját átadta” 
+- amikor valaki SZÉP juttatás elemet választ, akkor kell a táblázat alá egy 3*8 szám karakter befogadására képes mezősor, ahová kötelező kitölteni a SZÉP számlaszámot
+- amikor valaki Aktív magyarok juttatás elemet választ, akkor kell a táblázat alá egy 3*8 szám karakter befogadására képes mezősor, ahová kötelező kitölteni az Aktív magyarok számlaszámot
 - jóváhagyást aki az első lépést indította, annak a nevére tenni
 - Portál dokumentum törlése
 - jóváhagyásnál is legyenek formázások a táblán
@@ -97,6 +95,9 @@ kész:
 
 most mégsem:
 
+- homeoffice havonta 29080, de nem akarjuk egyelőre havonta kezelni (ezért az éves lesz 29080*12=348960)
+- opciók manage datába, ne kelljen újra és újra kitölteni
+	 helyette inkább opció indításnál, hogy beállítások betöltése (manage data rész nem kell, elég előzőből visszatölteni)
 - behúzni, Hr referens=Project Manager,Payrollert mind2-t adatbázisból
 - manuális mentés gomb hozzáadása
 - letesztelni ha a megjelenítésben 0 tizedes jegy van, lehet-e a háttérben mégis több?

@@ -2,7 +2,9 @@ function OnPreviousSettingsFinderChange(){
     let stepID=jr_get_value('PreviousSettingsFinder');
     let splitArr=stepID.split("::");
     stepID=splitArr[2];
-    jr_execute_dialog_function('LoadPreviousSettings', {"stepID":stepID}, onLoadSettingsSuccess);
+    if (stepID!==undefined) {
+        jr_execute_dialog_function('LoadPreviousSettings', {"stepID":stepID}, onLoadSettingsSuccess);
+    }
 }
 
 function onLoadSettingsSuccess(returnData){
@@ -68,4 +70,10 @@ function rowsAdded(){
     //jr_subtable_refresh();
     //jr_sql_refresh(['Department', 'Branch', 'HRReferee', 'Payroller']);
     console.log("rows have been added");
+    let entity=jr_get_value('MandantMossID');
+    let department=jr_get_value('Department');
+    var userParameters={};
+    userParameters.department=department;
+    userParameters.entity=entity;
+    CallFillEmployeeListSubTable(userParameters);
 }

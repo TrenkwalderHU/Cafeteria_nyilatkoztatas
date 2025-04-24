@@ -61,6 +61,7 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
         $options=[];
         $groups=[];
         $table=[];
+        $previousTable=[];
 
 	    $isTest=$this->getTableValue("isTest");
         $returnArray["isTest"]=$isTest;
@@ -82,14 +83,25 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
             $returnArray["EqualMonthRule"]=$this->getTableValue("EqualMonthRule");
             $returnArray["ProbationMonthRule"]=$this->getTableValue("ProbationMonthRule");
             $returnArray["ValidMonthRule"]=$this->getTableValue("ValidMonthRule");
+            $returnArray["HousingContractShown"]=$this->getTableValue('HousingContractShown');
+            $returnArray["StudentLoanContractS"]=$this->getTableValue('StudentLoanContractS');
+            $returnArray["SZEPACCNUM1"]=$this->getTableValue('SZEPACCNUM1');
+            $returnArray["SZEPACCNUM2"]=$this->getTableValue('SZEPACCNUM2');
+            $returnArray["SZEPACCNUM3"]=$this->getTableValue('SZEPACCNUM3');
+            $returnArray["SZEPActiveAccNum1"]=$this->getTableValue('SZEPActiveAccNum1');
+            $returnArray["SZEPActiveAccNum2"]=$this->getTableValue('SZEPActiveAccNum2');
+            $returnArray["SZEPActiveAccNum3"]=$this->getTableValue('SZEPActiveAccNum3');
+            $returnArray["BankAccContractShown"]=$this->getTableValue('BankAccContractShown');
+            $returnArray["BankAccContractID"]=$this->getTableValue('BankAccContractID');
+            $returnArray["BankAccContractID2"]=$this->getTableValue('BankAccContractID2');
+            $returnArray["BankAccContractName"]=$this->getTableValue('BankAccContractName');
+            $returnArray["BankAccContractName2"]=$this->getTableValue('BankAccContractName2');
             $returnArray["CafeteriaDeadline"]='2050-01-01';
-            if ($corrections==0) {
-                //check which of the available options were selected and load them into the array
-                foreach ($availableOptions as $option) {
-                    $optionNeeded=$this->getTableValue($option->optionName);
-                    if ($optionNeeded==1) {
-                        array_push($options,$option);
-                    }
+            //check which of the available options were selected and load them into the array
+            foreach ($availableOptions as $option) {
+                $optionNeeded=$this->getTableValue($option->optionName);
+                if ($optionNeeded==1) {
+                    array_push($options,$option);
                 }
             }
         }
@@ -138,13 +150,11 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
             }
             while ($row = $jobDB->fetchRow($result)) {
                 //$this->dump($row);
-                if ($corrections==0) {
-                    //check which of the available options were selected and load them into the array
-                    foreach ($availableOptions as $option) {
-                        $optionNeeded=$row[$option->optionName];
-                        if ($optionNeeded==1) {
-                            array_push($options,$option);
-                        }
+                //check which of the available options were selected and load them into the array
+                foreach ($availableOptions as $option) {
+                    $optionNeeded=$row[$option->optionName];
+                    if ($optionNeeded==1) {
+                        array_push($options,$option);
                     }
                 }
                 $returnArray["CafeGroupSelector"]=$row['CafeGroupSelector'];
@@ -241,11 +251,24 @@ class className extends JobRouter\Engine\Runtime\PhpFunction\DialogFunction
                 while ($row = $jobDB->fetchRow($result)) {
                     array_push($table,$row);
                 }
+
+                $sql = "SELECT [OptionName]
+                            ,[Amount]
+                FROM dbo.[HU_CAFE_PREVIOUS_EMP] where step_id = (select MAX(step_id) as stepid FROM HU_CAFE_EMPLOYEEDATA where link='".$url."')";
+                $this->alert($sql);
+                $result = $jobDB->query($sql);
+                if ($result === false) {
+                    throw new JobRouterException($jobDB->getErrorMessage());
+                }
+                while ($row = $jobDB->fetchRow($result)) {
+                    array_push($previousTable,$row);
+                }
             }
         }
         $returnArray["Groups"]=$groups;
         $returnArray["Options"]=$options;
         $returnArray["Table"]=$table;
+        $returnArray["PreviousTable"]=$previousTable;
         $this->setReturnValue('success', $returnArray);
 	}
 }

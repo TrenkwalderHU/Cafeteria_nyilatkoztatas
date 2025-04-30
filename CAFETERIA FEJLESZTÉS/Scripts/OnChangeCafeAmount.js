@@ -187,6 +187,7 @@ function differentAmounts(currentRowID,columnName){
         allMonthsArrayForSum.push(['November',availablePerMonth*Math.max(validMonthsCount-1,0),0,'NovemberGross']);
         allMonthsArrayForSum.push(['December',availableAmount,0,'DecemberGross']);
         var modifiedMonthArray=[];
+        let shouldHideBankAccount=true;
         for (let rowsI = 0; rowsI < rowIDs.length-1; rowsI++) {
             //console.log('###############################################');
             //console.log(rowsI);
@@ -234,7 +235,6 @@ function differentAmounts(currentRowID,columnName){
             jr_set_subtable_value(viewName, rowID, "Sum", sum);
             jr_set_subtable_value(viewName, rowIDs.length-1, "Sum", allMonthsArrayForSum[11][1]-allMonthsArrayForSum[11][2]);
 
-            let shouldHideBankAccount=true;
             let currentCafeOptionName=jr_get_subtable_value(viewName, rowID, "CafeName");
             if (currentCafeOptionName=="Lakhatási támogatás (35 év alatt)") {
                 if (sum>0) {
@@ -446,6 +446,7 @@ function sameAmounts(currentRowID,columnName){
         }
     }
     if (!valueOverError){
+        let shouldHideBankAccount=true;
         for (let rowsI = 0; rowsI < rowIDs.length-1; rowsI++) {
             const rowID = rowIDs[rowsI];
             let value=parseInt(jr_get_subtable_value(viewName, rowID, columnName));
@@ -453,6 +454,91 @@ function sameAmounts(currentRowID,columnName){
                 value=0;
             }
             jr_set_subtable_value(viewName, rowID, "Sum", value*validMonthsCount);
+            let currentCafeOptionName=jr_get_subtable_value(viewName, rowID, "CafeName");
+            if (currentCafeOptionName=="Lakhatási támogatás (35 év alatt)") {
+                if (value>0) {
+                    jr_show("HousingContractShown");
+                }
+                else{
+                    jr_hide("HousingContractShown");
+                }
+            }
+            else if (currentCafeOptionName=="Diákhitel támogatás") {
+                if (value>0) {
+                    jr_show("StudentLoanContractS");
+                }
+                else{
+                    jr_hide("StudentLoanContractS");
+                }
+            }
+            else if (currentCafeOptionName=="Önkéntes nyugdíjpénztári hozzájárulás") {
+                if (value>0) {
+                    jr_show("BankAccContractShown");
+                    shouldHideBankAccount=false;
+                    jr_show("BankAccContractName");
+                    jr_show("BankAccContractID");
+                }
+                else{
+                    jr_hide("BankAccContractName");
+                    jr_hide("BankAccContractID");
+                }
+            }
+            else if (currentCafeOptionName=="Önkéntes/önsegélyező egészségpénztári hozzájárulás") {
+                if (value>0) {
+                    jr_show("BankAccContractShown");
+                    shouldHideBankAccount=false;
+                    jr_show("BankAccContractName2");
+                    jr_show("BankAccContractID2");
+                }
+                else{
+                    jr_hide("BankAccContractName2");
+                    jr_hide("BankAccContractID2");
+                }
+            }
+            else if (currentCafeOptionName=="SZÉP kártya") {
+                if (value>0) {
+                    jr_show("SZEPACCNUM1");
+                    jr_show("SZEPACCNUM2");
+                    jr_show("SZEPACCNUM3");
+
+                    jr_show("SZEPACCTEXT");
+                    jr_show("SZEPSplitter");
+                    jr_show("SZEPSplitter2");
+                }
+                else{
+                    jr_hide("SZEPACCNUM1");
+                    jr_hide("SZEPACCNUM2");
+                    jr_hide("SZEPACCNUM3");
+
+                    jr_hide("SZEPACCTEXT");
+                    jr_hide("SZEPSplitter");
+                    jr_hide("SZEPSplitter2");
+                }
+            }
+            else if (currentCafeOptionName=="Aktív magyarok alszámla") {
+                if (value>0) {
+                    jr_show("SZEPActiveAccNum1");
+                    jr_show("SZEPActiveAccNum2");
+                    jr_show("SZEPActiveAccNum3");
+
+                    jr_show("SZEPACTIVETEXT");
+                    jr_show("SZEPActiveSplitter");
+                    jr_show("SZEPActiveSplitter2");
+                }
+                else{
+                    jr_hide("SZEPActiveAccNum1");
+                    jr_hide("SZEPActiveAccNum2");
+                    jr_hide("SZEPActiveAccNum3");
+
+                    jr_hide("SZEPACTIVETEXT");
+                    jr_hide("SZEPActiveSplitter");
+                    jr_hide("SZEPActiveSplitter2");
+                }
+            }
+
+            if (shouldHideBankAccount==true) {
+                jr_hide("BankAccContractShown");
+            }
         }
         //jr_set_subtable_value(viewName, rowIDs.length-1, "December",availablePerMonth-sum);
         jr_set_subtable_value(viewName, rowIDs.length-1, "DecemberGross",availablePerMonth-sum);

@@ -1,4 +1,6 @@
-
+2025.04.29
+- Kimenet excel vagy automatikus kapcsolattal adatátvitel?
+	-mindenképpen csv, a belsős excelből ki lehet indulni
 
 
 

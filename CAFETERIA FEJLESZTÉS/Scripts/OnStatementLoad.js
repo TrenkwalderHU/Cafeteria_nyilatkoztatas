@@ -102,7 +102,7 @@ function onDataFromLinkSuccess(returnData){
     jr_set_value('TaxingType', returnData.result.success["TaxingTypeSelector"]);
     jr_set_value('Term', returnData.result.success["TermSelector"]);
     jr_set_value('EqualMonthRule', returnData.result.success["EqualMonthRule"]);
-    returnData.result.success["Options"].forEach(element => {
+    /*returnData.result.success["Options"].forEach(element => {
         if (element["optionName"]=="HousingSupport") {
             jr_show("HousingContractShown");
         }
@@ -137,7 +137,7 @@ function onDataFromLinkSuccess(returnData){
             jr_show("SZEPActiveSplitter");
             jr_show("SZEPActiveSplitter2");
         }
-    });
+    });*/
 
     jr_set_value('HousingContractShown', returnData.result.success["HousingContractShown"]);
     jr_set_value('StudentLoanContractS', returnData.result.success["StudentLoanContractS"]);

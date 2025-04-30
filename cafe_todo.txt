@@ -3,6 +3,7 @@ Most:
 - havi egyenlőnél jelenleg csak 1 hónapra írja be, legyen másolva utólag
 - évközi belépőnél éves limit figyelése a security check lépésben
 - jóváhagyásnál is csak azok a pipák jelenjenek meg amikre van juttatás
+- szép kártya bankszámlánál a 3 mező tartalmát össze kell olvasni X2
 
 
 végén:
@@ -11,7 +12,6 @@ végén:
 	-összes találat számát kijelezni
 	-lapozást implementálni
 - Nexon Import elkészítése
-- talán a beállításokat manage datába (Ági nem biztos, hogy kéri)
 
 
 
@@ -28,13 +28,14 @@ hackelés ellen (low prio):
 
 részben kész:
 
+- kummulált nettó ne legyen töltve bizonyos keret típusoknál (szuperbruttó és bruttó) (nettót lehetne tölteni a kód részben újraírásával)
 - a nyilatkozat alá kell egy mezősor – mezőszekció neve „előző munkáltatótól kapott juttatások”, kötelező legyen bepipálni – ahová a kiválasztott juttatások szerinti mezőszám jelenik meg és mindegyikbe be kell kötelezően írni (évközi belépők esetében kiemelten fontos ez), hogy mennyit kapott az előző munkáltatótól. Az érték lehet = NULLA; így nem gond, ha kötelezővé tesszük, mert ha nem kapott, azt így is tudja jelölni - részben kész, form küldése után a security check nézi majd utólag az éves limitet is
-
-- digitális beléptetésnél van számlaszám mező, nézzem meg, hogy ott hogyan néz ki (Áginak átküldve az én megoldásom, jó ez így?)
-
+- talán a beállításokat manage datába (Ági nem biztos, hogy kéri)
 
 kész:
 
+- kummulált nettó ne legyen töltve bizonyos keret típusoknál (szuperbruttó és bruttó)
+- a szép számla, és a jóváhagyások csak akkor jelenjenek meg, ha értéket írt be a megfelelő sorokba
 - minden process table value-t felvenni onstatementloadba és a phpba
 - felhasználható összeg formátum
 - esetleg csak azoknál kérjen előző munkáltatói adatot, ahol amugy is van éves keret

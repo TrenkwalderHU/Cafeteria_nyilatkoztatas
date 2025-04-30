@@ -15,146 +15,6 @@ function OnChangeCafeAmount(currentRowID,columnName){
 }
 
 function differentAmounts(currentRowID,columnName){
-    var valueOverError = checkLimits(currentRowID, columnName);
-    if (!valueOverError){
-        displaySums(currentRowID, columnName);
-    }
-}
-
-function sameAmounts(currentRowID,columnName){
-    var viewName='HU_CAFE_AMOUNTS_TABLE_VIEW';
-    var originalValue=parseInt(jr_get_value('SaveCellValueHelper'));
-    var availableAmount=parseInt(jr_get_value('RealAvailableAmount'));
-    var validMonthsCount=parseInt(jr_get_value('ValidMonthsCount'));
-    var taxingType=jr_get_value('TaxingType');
-    if (isNaN(originalValue)){
-        originalValue=0;
-    }
-    var valueOverError=false;
-    var availablePerMonth=Math.floor(availableAmount/validMonthsCount);
-    var rowIDs=jr_get_subtable_row_ids(viewName);
-    var sum=0;
-    for (let rowsI = 0; rowsI < rowIDs.length-1; rowsI++) {
-        const rowID = rowIDs[rowsI];
-        
-        //Exits if the value has been exceeded
-        if (valueOverError){
-            break;
-        }
-        let value=parseInt(jr_get_subtable_value(viewName, rowID, columnName));
-        if (isNaN(value)){
-            value=0;
-        }
-        let multiplier=Number(jr_get_subtable_value(viewName, rowID, "Multiplier"));
-        let grossModifiedValue=Math.floor(value*multiplier);
-        if (taxingType=="nettó") {
-            grossModifiedValue=value;
-        }
-        sum+=grossModifiedValue;
-        if (sum>availablePerMonth) {
-            jr_set_subtable_value(viewName, currentRowID, columnName, originalValue);
-            //Exits if the value has been exceeded
-            jr_notify_warn('Átlépted a megengedett havi keretedet, ezért visszaállítottuk a legutóbb megadott értéket!', 10);
-            valueOverError=true;
-            break;
-        }
-
-        let monthsLimit=parseInt(jr_get_subtable_value(viewName, rowID, "LimitPeriod1"));
-        let monthsLimit2=parseInt(jr_get_subtable_value(viewName, rowID, "LimitPeriod2"));
-        if (isNaN(monthsLimit2)){
-            monthsLimit2=0;
-        }
-        let monthsLimit3=parseInt(jr_get_subtable_value(viewName, rowID, "LimitPeriod3"));
-        if (isNaN(monthsLimit3)){
-            monthsLimit3=0;
-        }
-        let monthsLimit4=parseInt(jr_get_subtable_value(viewName, rowID, "LimitPeriod4"));
-        if (isNaN(monthsLimit4)){
-            monthsLimit4=0;
-        }
-        let amountLimit=parseInt(jr_get_subtable_value(viewName, rowID, "LimitAmount1"));
-        let amountLimit2=parseInt(jr_get_subtable_value(viewName, rowID, "LimitAmount2"));
-        if (isNaN(amountLimit2)){
-            amountLimit2=0;
-        }
-        let amountLimit3=parseInt(jr_get_subtable_value(viewName, rowID, "LimitAmount3"));
-        if (isNaN(amountLimit3)){
-            amountLimit3=0;
-        }
-        let amountLimit4=parseInt(jr_get_subtable_value(viewName, rowID, "LimitAmount4"));
-        if (isNaN(amountLimit4)){
-            amountLimit4=0;
-        }
-        let optionName=jr_get_subtable_value(viewName, rowID, "CafeName");
-
-        var firstMonthLimitRelevantMonthsCount=monthsLimit-(12-validMonthsCount);
-        if (value*firstMonthLimitRelevantMonthsCount>amountLimit && amountLimit>0) {
-            jr_set_subtable_value(viewName, currentRowID, columnName, originalValue);
-            //Exits if the value has been exceeded
-            jr_notify_warn('Átlépted a '+ optionName + '-ból/ből a megengedett keretedet, az 1. időszakban ezért visszaállítottuk a legutóbb megadott értéket!', 10);
-            valueOverError=true;
-            break;
-        }
-
-        var secondMonthLimitRelevantMonthsCount=monthsLimit+monthsLimit2-(12-validMonthsCount);
-        secondMonthLimitRelevantMonthsCount=Math.min(secondMonthLimitRelevantMonthsCount, monthsLimit2);
-        if (secondMonthLimitRelevantMonthsCount<=0) {
-            secondMonthLimitRelevantMonthsCount=0;
-        }
-        if (value*secondMonthLimitRelevantMonthsCount>amountLimit2 && amountLimit2>0) {
-            jr_set_subtable_value(viewName, currentRowID, columnName, originalValue);
-            //Exits if the value has been exceeded
-            jr_notify_warn('Átlépted a '+ optionName + '-ból/ből a megengedett keretedet, a 2. időszakban ezért visszaállítottuk a legutóbb megadott értéket!', 10);
-            valueOverError=true;
-            break;
-        }
-
-        var thirdMonthLimitRelevantMonthsCount=monthsLimit+monthsLimit2+monthsLimit3-(12-validMonthsCount);
-        thirdMonthLimitRelevantMonthsCount=Math.min(thirdMonthLimitRelevantMonthsCount, monthsLimit3);
-        if (thirdMonthLimitRelevantMonthsCount<=0) {
-            thirdMonthLimitRelevantMonthsCount=0;
-        }
-        if (value*thirdMonthLimitRelevantMonthsCount>amountLimit3 && amountLimit3>0) {
-            jr_set_subtable_value(viewName, currentRowID, columnName, originalValue);
-            //Exits if the value has been exceeded
-            jr_notify_warn('Átlépted a '+ optionName + '-ból/ből a megengedett keretedet, a 3. időszakban ezért visszaállítottuk a legutóbb megadott értéket!', 10);
-            valueOverError=true;
-            break;
-        }
-        var fourthMonthLimitRelevantMonthsCount=monthsLimit+monthsLimit2+monthsLimit3+monthsLimit4-(12-validMonthsCount);
-        fourthMonthLimitRelevantMonthsCount=Math.min(fourthMonthLimitRelevantMonthsCount, monthsLimit4);
-        if (value*fourthMonthLimitRelevantMonthsCount>amountLimit4 && amountLimit4>0) {
-            jr_set_subtable_value(viewName, currentRowID, columnName, originalValue);
-            //Exits if the value has been exceeded
-            jr_notify_warn('Átlépted a '+ optionName + '-ból/ből a megengedett keretedet, a 4. időszakban ezért visszaállítottuk a legutóbb megadott értéket!', 10);
-            valueOverError=true;
-            break;
-        }
-    }
-    if (!valueOverError){
-        for (let rowsI = 0; rowsI < rowIDs.length-1; rowsI++) {
-            const rowID = rowIDs[rowsI];
-            let value=parseInt(jr_get_subtable_value(viewName, rowID, columnName));
-            if (isNaN(value)){
-                value=0;
-            }
-            jr_set_subtable_value(viewName, rowID, "Sum", value*validMonthsCount);
-        }
-        jr_set_subtable_value(viewName, rowIDs.length-1, "December",availablePerMonth-sum);
-        jr_set_subtable_value(viewName, rowIDs.length-1, "DecemberGross",availablePerMonth-sum);
-        jr_set_subtable_value(viewName, rowIDs.length-1, "Sum", availableAmount-sum*validMonthsCount);
-        let value=parseInt(jr_get_subtable_value(viewName, currentRowID, columnName));
-        if (isNaN(value)){
-            value=0;
-        }
-        let multiplier=Number(jr_get_subtable_value(viewName, currentRowID, "Multiplier"));
-        let grossModifiedValue=Math.floor(value*multiplier);
-        jr_set_subtable_value(viewName, currentRowID, "DecemberGross", Math.floor(grossModifiedValue));
-    }
-}
-
-function checkLimits(currentRowID, columnName)
-{
     var viewName='HU_CAFE_AMOUNTS_TABLE_VIEW';
     var originalValue=parseInt(jr_get_value('SaveCellValueHelper'));
     var availableAmount=parseInt(jr_get_value('RealAvailableAmount'));
@@ -310,86 +170,299 @@ function checkLimits(currentRowID, columnName)
             }
         }
     }
+    if (!valueOverError){
+        rowIDs=jr_get_subtable_row_ids(viewName);
+        //Calculate all the sums and remaining values to display them in the table
+        var allMonthsArrayForSum=[];
+        allMonthsArrayForSum.push(['January',availablePerMonth*Math.max(validMonthsCount-11,0),0,'JanuaryGross']);
+        allMonthsArrayForSum.push(['February',availablePerMonth*Math.max(validMonthsCount-10,0),0,'FebruaryGross']);
+        allMonthsArrayForSum.push(['March',availablePerMonth*Math.max(validMonthsCount-9,0),0,'MarchGross']);
+        allMonthsArrayForSum.push(['April',availablePerMonth*Math.max(validMonthsCount-8,0),0,'AprilGross']);
+        allMonthsArrayForSum.push(['May',availablePerMonth*Math.max(validMonthsCount-7,0),0,'MayGross']);
+        allMonthsArrayForSum.push(['June',availablePerMonth*Math.max(validMonthsCount-6,0),0,'JuneGross']);
+        allMonthsArrayForSum.push(['July',availablePerMonth*Math.max(validMonthsCount-5,0),0,'JulyGross']);
+        allMonthsArrayForSum.push(['August',availablePerMonth*Math.max(validMonthsCount-4,0),0,'AugustGross']);
+        allMonthsArrayForSum.push(['September',availablePerMonth*Math.max(validMonthsCount-3,0),0,'SeptemberGross']);
+        allMonthsArrayForSum.push(['October',availablePerMonth*Math.max(validMonthsCount-2,0),0,'OctoberGross']);
+        allMonthsArrayForSum.push(['November',availablePerMonth*Math.max(validMonthsCount-1,0),0,'NovemberGross']);
+        allMonthsArrayForSum.push(['December',availableAmount,0,'DecemberGross']);
+        var modifiedMonthArray=[];
+        for (let rowsI = 0; rowsI < rowIDs.length-1; rowsI++) {
+            //console.log('###############################################');
+            //console.log(rowsI);
+            const rowID = rowIDs[rowsI];
+            let sum=0;
+            for (let monthI = 12-validMonthsCount; monthI < allMonthsArrayForSum.length; monthI++) {
+                //console.log("--------------------------------------------------------------------------------hónap sorszáma jelenleg:");
+                //console.log(monthI);
+                let currentMonthArray = allMonthsArrayForSum[monthI];
+                if (columnName==currentMonthArray[0]) {
+                    modifiedMonthArray=currentMonthArray;
+                }
+                let value=parseInt(jr_get_subtable_value(viewName, rowID, currentMonthArray[0]));
+                if (isNaN(value)){
+                    value=0;
+                }
+                let multiplier=Number(jr_get_subtable_value(viewName, rowID, "Multiplier"));
+                let grossModifiedValue=Math.floor(value*multiplier);
+                if (taxingType=="nettó") {
+                    grossModifiedValue=value;
+                }
+                //console.log("bruttósított érték:");
+                //console.log(grossModifiedValue);
+                sum+=value;
+                //console.log("összeg:");
+                //console.log(sum);
+                //Cummulate values through all the remaining months
+                for (let remainingMonthI = monthI; remainingMonthI < allMonthsArrayForSum.length; remainingMonthI++) {
+                    /*console.log("hátralévő hónap sorszáma:");
+                    console.log(remainingMonthI);
+                    let element = allMonthsArrayForSum[remainingMonthI];
+                    console.log("értékei:");
+                    console.log(element[1]);
+                    console.log(element[2]);
+                    console.log(grossModifiedValue);
+                    element[2]+=grossModifiedValue;
+                    console.log("hozzáadva a mostani:");
+                    console.log(element[2]);*/
+                    let element = allMonthsArrayForSum[remainingMonthI];
+                    element[2]+=grossModifiedValue;
+                    //jr_set_subtable_value(viewName, rowIDs.length-1, element[0],element[1]-element[2]);
+                    jr_set_subtable_value(viewName, rowIDs.length-1, element[3],element[1]-element[2]);
+                }
+            }
+            jr_set_subtable_value(viewName, rowID, "Sum", sum);
+            jr_set_subtable_value(viewName, rowIDs.length-1, "Sum", allMonthsArrayForSum[11][1]-allMonthsArrayForSum[11][2]);
+
+            let shouldHideBankAccount=true;
+            let currentCafeOptionName=jr_get_subtable_value(viewName, rowID, "CafeName");
+            if (currentCafeOptionName=="Lakhatási támogatás (35 év alatt)") {
+                if (sum>0) {
+                    jr_show("HousingContractShown");
+                }
+                else{
+                    jr_hide("HousingContractShown");
+                }
+            }
+            else if (currentCafeOptionName=="Diákhitel támogatás") {
+                if (sum>0) {
+                    jr_show("StudentLoanContractS");
+                }
+                else{
+                    jr_hide("StudentLoanContractS");
+                }
+            }
+            else if (currentCafeOptionName=="Önkéntes nyugdíjpénztári hozzájárulás") {
+                if (sum>0) {
+                    jr_show("BankAccContractShown");
+                    shouldHideBankAccount=false;
+                    jr_show("BankAccContractName");
+                    jr_show("BankAccContractID");
+                }
+                else{
+                    jr_hide("BankAccContractName");
+                    jr_hide("BankAccContractID");
+                }
+            }
+            else if (currentCafeOptionName=="Önkéntes/önsegélyező egészségpénztári hozzájárulás") {
+                if (sum>0) {
+                    jr_show("BankAccContractShown");
+                    shouldHideBankAccount=false;
+                    jr_show("BankAccContractName2");
+                    jr_show("BankAccContractID2");
+                }
+                else{
+                    jr_hide("BankAccContractName2");
+                    jr_hide("BankAccContractID2");
+                }
+            }
+            else if (currentCafeOptionName=="SZÉP kártya") {
+                if (sum>0) {
+                    jr_show("SZEPACCNUM1");
+                    jr_show("SZEPACCNUM2");
+                    jr_show("SZEPACCNUM3");
+
+                    jr_show("SZEPACCTEXT");
+                    jr_show("SZEPSplitter");
+                    jr_show("SZEPSplitter2");
+                }
+                else{
+                    jr_hide("SZEPACCNUM1");
+                    jr_hide("SZEPACCNUM2");
+                    jr_hide("SZEPACCNUM3");
+
+                    jr_hide("SZEPACCTEXT");
+                    jr_hide("SZEPSplitter");
+                    jr_hide("SZEPSplitter2");
+                }
+            }
+            else if (currentCafeOptionName=="Aktív magyarok alszámla") {
+                if (sum>0) {
+                    jr_show("SZEPActiveAccNum1");
+                    jr_show("SZEPActiveAccNum2");
+                    jr_show("SZEPActiveAccNum3");
+
+                    jr_show("SZEPACTIVETEXT");
+                    jr_show("SZEPActiveSplitter");
+                    jr_show("SZEPActiveSplitter2");
+                }
+                else{
+                    jr_hide("SZEPActiveAccNum1");
+                    jr_hide("SZEPActiveAccNum2");
+                    jr_hide("SZEPActiveAccNum3");
+
+                    jr_hide("SZEPACTIVETEXT");
+                    jr_hide("SZEPActiveSplitter");
+                    jr_hide("SZEPActiveSplitter2");
+                }
+            }
+
+            if (shouldHideBankAccount==true) {
+                jr_hide("BankAccContractShown");
+            }
+        }
+
+        //update Gross cell value corresponding to the user-modified cell
+        let value=parseInt(jr_get_subtable_value(viewName, currentRowID, columnName));
+        if (isNaN(value)){
+            value=0;
+        }
+        let multiplier=Number(jr_get_subtable_value(viewName, currentRowID, "Multiplier"));
+        let grossModifiedValue=Math.floor(value*multiplier);
+        if (modifiedMonthArray.length>0) {
+            jr_set_subtable_value(viewName, currentRowID, modifiedMonthArray[3], Math.floor(grossModifiedValue));
+        }
+    }
 }
 
-function displaySums(currentRowID, columnName){
+function sameAmounts(currentRowID,columnName){
     var viewName='HU_CAFE_AMOUNTS_TABLE_VIEW';
-    var rowIDs=jr_get_subtable_row_ids(viewName);
+    var originalValue=parseInt(jr_get_value('SaveCellValueHelper'));
     var availableAmount=parseInt(jr_get_value('RealAvailableAmount'));
     var validMonthsCount=parseInt(jr_get_value('ValidMonthsCount'));
     var taxingType=jr_get_value('TaxingType');
+    if (isNaN(originalValue)){
+        originalValue=0;
+    }
+    var valueOverError=false;
     var availablePerMonth=Math.floor(availableAmount/validMonthsCount);
-    //Calculate all the sums and remaining values to display them in the table
-    var allMonthsArrayForSum=[];
-    allMonthsArrayForSum.push(['January',availablePerMonth*Math.max(validMonthsCount-11,0),0,'JanuaryGross']);
-    allMonthsArrayForSum.push(['February',availablePerMonth*Math.max(validMonthsCount-10,0),0,'FebruaryGross']);
-    allMonthsArrayForSum.push(['March',availablePerMonth*Math.max(validMonthsCount-9,0),0,'MarchGross']);
-    allMonthsArrayForSum.push(['April',availablePerMonth*Math.max(validMonthsCount-8,0),0,'AprilGross']);
-    allMonthsArrayForSum.push(['May',availablePerMonth*Math.max(validMonthsCount-7,0),0,'MayGross']);
-    allMonthsArrayForSum.push(['June',availablePerMonth*Math.max(validMonthsCount-6,0),0,'JuneGross']);
-    allMonthsArrayForSum.push(['July',availablePerMonth*Math.max(validMonthsCount-5,0),0,'JulyGross']);
-    allMonthsArrayForSum.push(['August',availablePerMonth*Math.max(validMonthsCount-4,0),0,'AugustGross']);
-    allMonthsArrayForSum.push(['September',availablePerMonth*Math.max(validMonthsCount-3,0),0,'SeptemberGross']);
-    allMonthsArrayForSum.push(['October',availablePerMonth*Math.max(validMonthsCount-2,0),0,'OctoberGross']);
-    allMonthsArrayForSum.push(['November',availablePerMonth*Math.max(validMonthsCount-1,0),0,'NovemberGross']);
-    allMonthsArrayForSum.push(['December',availableAmount,0,'DecemberGross']);
-    var modifiedMonthArray=[];
+    var rowIDs=jr_get_subtable_row_ids(viewName);
+    var sum=0;
     for (let rowsI = 0; rowsI < rowIDs.length-1; rowsI++) {
-        //console.log('###############################################');
-        //console.log(rowsI);
         const rowID = rowIDs[rowsI];
-        let sum=0;
-        for (let monthI = 12-validMonthsCount; monthI < allMonthsArrayForSum.length; monthI++) {
-            //console.log("--------------------------------------------------------------------------------hónap sorszáma jelenleg:");
-            //console.log(monthI);
-            let currentMonthArray = allMonthsArrayForSum[monthI];
-            if (columnName==currentMonthArray[0]) {
-                modifiedMonthArray=currentMonthArray;
-            }
-            let value=parseInt(jr_get_subtable_value(viewName, rowID, currentMonthArray[0]));
+        
+        //Exits if the value has been exceeded
+        if (valueOverError){
+            break;
+        }
+        let value=parseInt(jr_get_subtable_value(viewName, rowID, columnName));
+        if (isNaN(value)){
+            value=0;
+        }
+        let multiplier=Number(jr_get_subtable_value(viewName, rowID, "Multiplier"));
+        let grossModifiedValue=Math.floor(value*multiplier);
+        if (taxingType=="nettó") {
+            grossModifiedValue=value;
+        }
+        sum+=grossModifiedValue;
+        if (sum>availablePerMonth) {
+            jr_set_subtable_value(viewName, currentRowID, columnName, originalValue);
+            //Exits if the value has been exceeded
+            jr_notify_warn('Átlépted a megengedett havi keretedet, ezért visszaállítottuk a legutóbb megadott értéket!', 10);
+            valueOverError=true;
+            break;
+        }
+
+        let monthsLimit=parseInt(jr_get_subtable_value(viewName, rowID, "LimitPeriod1"));
+        let monthsLimit2=parseInt(jr_get_subtable_value(viewName, rowID, "LimitPeriod2"));
+        if (isNaN(monthsLimit2)){
+            monthsLimit2=0;
+        }
+        let monthsLimit3=parseInt(jr_get_subtable_value(viewName, rowID, "LimitPeriod3"));
+        if (isNaN(monthsLimit3)){
+            monthsLimit3=0;
+        }
+        let monthsLimit4=parseInt(jr_get_subtable_value(viewName, rowID, "LimitPeriod4"));
+        if (isNaN(monthsLimit4)){
+            monthsLimit4=0;
+        }
+        let amountLimit=parseInt(jr_get_subtable_value(viewName, rowID, "LimitAmount1"));
+        let amountLimit2=parseInt(jr_get_subtable_value(viewName, rowID, "LimitAmount2"));
+        if (isNaN(amountLimit2)){
+            amountLimit2=0;
+        }
+        let amountLimit3=parseInt(jr_get_subtable_value(viewName, rowID, "LimitAmount3"));
+        if (isNaN(amountLimit3)){
+            amountLimit3=0;
+        }
+        let amountLimit4=parseInt(jr_get_subtable_value(viewName, rowID, "LimitAmount4"));
+        if (isNaN(amountLimit4)){
+            amountLimit4=0;
+        }
+        let optionName=jr_get_subtable_value(viewName, rowID, "CafeName");
+
+        var firstMonthLimitRelevantMonthsCount=monthsLimit-(12-validMonthsCount);
+        if (value*firstMonthLimitRelevantMonthsCount>amountLimit && amountLimit>0) {
+            jr_set_subtable_value(viewName, currentRowID, columnName, originalValue);
+            //Exits if the value has been exceeded
+            jr_notify_warn('Átlépted a '+ optionName + '-ból/ből a megengedett keretedet, az 1. időszakban ezért visszaállítottuk a legutóbb megadott értéket!', 10);
+            valueOverError=true;
+            break;
+        }
+
+        var secondMonthLimitRelevantMonthsCount=monthsLimit+monthsLimit2-(12-validMonthsCount);
+        secondMonthLimitRelevantMonthsCount=Math.min(secondMonthLimitRelevantMonthsCount, monthsLimit2);
+        if (secondMonthLimitRelevantMonthsCount<=0) {
+            secondMonthLimitRelevantMonthsCount=0;
+        }
+        if (value*secondMonthLimitRelevantMonthsCount>amountLimit2 && amountLimit2>0) {
+            jr_set_subtable_value(viewName, currentRowID, columnName, originalValue);
+            //Exits if the value has been exceeded
+            jr_notify_warn('Átlépted a '+ optionName + '-ból/ből a megengedett keretedet, a 2. időszakban ezért visszaállítottuk a legutóbb megadott értéket!', 10);
+            valueOverError=true;
+            break;
+        }
+
+        var thirdMonthLimitRelevantMonthsCount=monthsLimit+monthsLimit2+monthsLimit3-(12-validMonthsCount);
+        thirdMonthLimitRelevantMonthsCount=Math.min(thirdMonthLimitRelevantMonthsCount, monthsLimit3);
+        if (thirdMonthLimitRelevantMonthsCount<=0) {
+            thirdMonthLimitRelevantMonthsCount=0;
+        }
+        if (value*thirdMonthLimitRelevantMonthsCount>amountLimit3 && amountLimit3>0) {
+            jr_set_subtable_value(viewName, currentRowID, columnName, originalValue);
+            //Exits if the value has been exceeded
+            jr_notify_warn('Átlépted a '+ optionName + '-ból/ből a megengedett keretedet, a 3. időszakban ezért visszaállítottuk a legutóbb megadott értéket!', 10);
+            valueOverError=true;
+            break;
+        }
+        var fourthMonthLimitRelevantMonthsCount=monthsLimit+monthsLimit2+monthsLimit3+monthsLimit4-(12-validMonthsCount);
+        fourthMonthLimitRelevantMonthsCount=Math.min(fourthMonthLimitRelevantMonthsCount, monthsLimit4);
+        if (value*fourthMonthLimitRelevantMonthsCount>amountLimit4 && amountLimit4>0) {
+            jr_set_subtable_value(viewName, currentRowID, columnName, originalValue);
+            //Exits if the value has been exceeded
+            jr_notify_warn('Átlépted a '+ optionName + '-ból/ből a megengedett keretedet, a 4. időszakban ezért visszaállítottuk a legutóbb megadott értéket!', 10);
+            valueOverError=true;
+            break;
+        }
+    }
+    if (!valueOverError){
+        for (let rowsI = 0; rowsI < rowIDs.length-1; rowsI++) {
+            const rowID = rowIDs[rowsI];
+            let value=parseInt(jr_get_subtable_value(viewName, rowID, columnName));
             if (isNaN(value)){
                 value=0;
             }
-            let multiplier=Number(jr_get_subtable_value(viewName, rowID, "Multiplier"));
-            let grossModifiedValue=Math.floor(value*multiplier);
-            if (taxingType=="nettó") {
-                grossModifiedValue=value;
-            }
-            //console.log("bruttósított érték:");
-            //console.log(grossModifiedValue);
-            sum+=value;
-            //console.log("összeg:");
-            //console.log(sum);
-            //Cummulate values through all the remaining months
-            for (let remainingMonthI = monthI; remainingMonthI < allMonthsArrayForSum.length; remainingMonthI++) {
-                /*console.log("hátralévő hónap sorszáma:");
-                console.log(remainingMonthI);
-                let element = allMonthsArrayForSum[remainingMonthI];
-                console.log("értékei:");
-                console.log(element[1]);
-                console.log(element[2]);
-                console.log(grossModifiedValue);
-                element[2]+=grossModifiedValue;
-                console.log("hozzáadva a mostani:");
-                console.log(element[2]);*/
-                let element = allMonthsArrayForSum[remainingMonthI];
-                element[2]+=grossModifiedValue;
-                jr_set_subtable_value(viewName, rowIDs.length-1, element[0],element[1]-element[2]);
-                jr_set_subtable_value(viewName, rowIDs.length-1, element[3],element[1]-element[2]);
-            }
+            jr_set_subtable_value(viewName, rowID, "Sum", value*validMonthsCount);
         }
-        jr_set_subtable_value(viewName, rowID, "Sum", sum);
-        jr_set_subtable_value(viewName, rowIDs.length-1, "Sum", allMonthsArrayForSum[11][1]-allMonthsArrayForSum[11][2]);
-    }
-
-    //update Gross cell value corresponding to the user-modified cell
-    let value=parseInt(jr_get_subtable_value(viewName, currentRowID, columnName));
-    if (isNaN(value)){
-        value=0;
-    }
-    let multiplier=Number(jr_get_subtable_value(viewName, currentRowID, "Multiplier"));
-    let grossModifiedValue=Math.floor(value*multiplier);
-    if (modifiedMonthArray.length>0) {
-        jr_set_subtable_value(viewName, currentRowID, modifiedMonthArray[3], Math.floor(grossModifiedValue));
+        //jr_set_subtable_value(viewName, rowIDs.length-1, "December",availablePerMonth-sum);
+        jr_set_subtable_value(viewName, rowIDs.length-1, "DecemberGross",availablePerMonth-sum);
+        jr_set_subtable_value(viewName, rowIDs.length-1, "Sum", availableAmount-sum*validMonthsCount);
+        let value=parseInt(jr_get_subtable_value(viewName, currentRowID, columnName));
+        if (isNaN(value)){
+            value=0;
+        }
+        let multiplier=Number(jr_get_subtable_value(viewName, currentRowID, "Multiplier"));
+        let grossModifiedValue=Math.floor(value*multiplier);
+        jr_set_subtable_value(viewName, currentRowID, "DecemberGross", Math.floor(grossModifiedValue));
     }
 }
